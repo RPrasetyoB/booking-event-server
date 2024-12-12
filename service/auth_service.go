@@ -26,10 +26,7 @@ func NewAuthService(r repository.AuthRepository) *authService {
 }
 
 func (s *authService) Register(req *dto.RegisterRequest) error {
-	nameExist, err := s.repository.FindName(req.Name)
-	if err != nil {
-		return &errorhandler.InternalServerError{Message: err.Error()}
-	}
+	nameExist, _ := s.repository.FindName(req.Name)
 
 	if nameExist != nil {
 		return &errorhandler.BadRequestError{Message: "name already taken"}
@@ -46,8 +43,6 @@ func (s *authService) Register(req *dto.RegisterRequest) error {
 		roleID = 1
 	case "vendor":
 		roleID = 2
-	default:
-		return &errorhandler.BadRequestError{Message: "invalid role"}
 	}
 
 	nanoid, _ := helper.GenerateNanoId()
