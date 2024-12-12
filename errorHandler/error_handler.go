@@ -20,6 +20,8 @@ func HandleError(c *gin.Context, err error) {
 		statusCode = http.StatusInternalServerError
 	case *UnauthorizedError:
 		statusCode = http.StatusUnauthorized
+	case *AccessForbiddenError:
+		statusCode = http.StatusForbidden
 	}
 
 	response := helper.Response(dto.ResponseParams{

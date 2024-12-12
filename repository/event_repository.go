@@ -2,6 +2,7 @@ package repository
 
 import (
 	"booking-event-server/entity"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -14,6 +15,7 @@ type EventRepository interface {
 	GetEventByStatus(status string) ([]*entity.Event, error)
 	PutEventByID(eventID string, event entity.Event) (*entity.Event, error)
 	DeleteEventByID(eventID string) error
+	PatchEventByID(eventID string, confirmedDate time.Time) (*entity.Event, error)
 }
 
 type eventRepository struct {
@@ -90,10 +92,29 @@ func (r eventRepository) PutEventByID(eventID string, event entity.Event) (*enti
 }
 
 func (r eventRepository) DeleteEventByID(eventID string) error {
-	err := r.db.Where("id = ?", eventID).Delete(&entity.Event{}).Error
-	if err != nil {
-		return err
+	result := r.db.Where("id = ?", eventID).Delete(&entity.Event{})
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
 	}
 
 	return nil
+}
+
+func (r eventRepository) PatchEventByID(eventID string, confirmedDate time.Time) (*entity.Event, error) {
+	err := r.db.Model(&entity.Event{}).Where("id = ?", eventID).Update("confirmed_date", confirmedDate).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var updatedEvent entity.Event
+	err = r.db.Where("id = ?", eventID).First(&updatedEvent).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedEvent, nil
 }

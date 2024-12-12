@@ -16,6 +16,10 @@ type UnauthorizedError struct {
 	Message string
 }
 
+type AccessForbiddenError struct {
+	Message string
+}
+
 func (e *NotFoundError) Error() string {
 	return e.Message
 }
@@ -29,5 +33,9 @@ func (e *InternalServerError) Error() string {
 }
 
 func (e *UnauthorizedError) Error() string {
+	return e.Message
+}
+
+func (e *AccessForbiddenError) Error() string {
 	return e.Message
 }

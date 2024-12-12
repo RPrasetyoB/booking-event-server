@@ -24,7 +24,7 @@ func NewAuthRepository(db *gorm.DB) *authRepository {
 
 func (r *authRepository) FindUserById(userId string) (*entity.User, error) {
 	var user entity.User
-	err := r.db.First(&user, "user_id = ?", userId).Error
+	err := r.db.First(&user, "id = ?", userId).Error
 
 	if err != nil {
 		return nil, err

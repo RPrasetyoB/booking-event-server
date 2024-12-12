@@ -8,12 +8,17 @@ type CreaEventRequest struct {
 	Location       string   `validate:"required" json:"location"`
 }
 
+type ConfirmDateRequest struct {
+	Confirmed_date string `json:"confirmed_date"`
+}
+
 type EventResponse struct {
 	ID             string     `json:"id"`
 	Event_name     string     `json:"event_name"`
 	Proposed_dates []string   `validate:"required,dive,datetime=02-01-2006" json:"proposed_dates"`
 	Location       string     `json:"location"`
 	User_id        string     `json:"user_id"`
+	User_name      *string    `json:"user_name"`
 	Confirmed_date *time.Time `json:"confirmed_date"`
 	Created_at     time.Time  `json:"created_at"`
 	Updated_at     time.Time  `json:"updated_at"`

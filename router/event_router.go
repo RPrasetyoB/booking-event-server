@@ -13,9 +13,15 @@ import (
 func EventRouter(api *gin.RouterGroup) {
 	eventRepository := repository.NewEventRepository(config.DB)
 	dateRepository := repository.NewDatesRepository(config.DB)
-	eventService := service.NewEventService(eventRepository, dateRepository)
+	authRepository := repository.NewAuthRepository(config.DB)
+	eventService := service.NewEventService(eventRepository, dateRepository, authRepository)
 	eventController := controller.NewEventController(eventService)
 
 	event := api.Group("/event")
-	event.POST("/", middleware.Authentication, eventController.CreateEvent)
+	event.POST("/hr", middleware.Authentication, eventController.CreateEvent)
+	event.GET("/hr", middleware.Authentication, middleware.HrAuth, eventController.GetEventsHRbyUserID)
+	event.PUT("/hr/:id", middleware.Authentication, middleware.HrAuth, eventController.UpdateEventHR)
+	event.DELETE("/:id", middleware.Authentication, eventController.DeleteEventByID)
+	event.GET("/vendor", middleware.Authentication, middleware.VendorAuth, eventController.GetAllEventsVendor)
+	event.PATCH("/vendor/:id", middleware.Authentication, middleware.VendorAuth, eventController.ConfirmDate)
 }
