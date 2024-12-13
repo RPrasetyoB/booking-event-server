@@ -22,8 +22,6 @@ Before using the API server, ensure that you have:
 
 - **Visual Studio Code** or any IDE.
 - **Go** installed on your system.
-  
-  
 
 ### Database design
 
@@ -37,29 +35,28 @@ The API server uses a bearer token authentication mechanism to secure endpoints.
 
 ```ts
 func Authentication(c *gin.Context) {
-	userData, err := helper.GetToken(c)
-	if err != nil {
-		if err == jwt.ErrTokenExpired {
-			errorhandler.HandleError(c, &errorhandler.UnauthorizedError{
-				Message: "Token expired, please re-login",
-			})
-			c.Abort()
-			return
-		}
+    userData, err := helper.GetToken(c)
+    if err != nil {
+        if err == jwt.ErrTokenExpired {
+            errorhandler.HandleError(c, &errorhandler.UnauthorizedError{
+                Message: "Token expired, please re-login",
+            })
+            c.Abort()
+            return
+        }
 
-		errorhandler.HandleError(c, &errorhandler.UnauthorizedError{
-			Message: "Unauthorized",
-		})
-		c.Abort()
-		return
-	}
+        errorhandler.HandleError(c, &errorhandler.UnauthorizedError{
+            Message: "Unauthorized",
+        })
+        c.Abort()
+        return
+    }
 
-	c.Set("user", use
+    c.Set("user", use
 
 rData)
-	c.Next()
+    c.Next()
 }
-
 ```
 
 ### Authorization
@@ -68,42 +65,40 @@ rData)
 
 ```ts
 func authorization(allowedRoles []int64) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		userData, exists := c.Get("user")
-		if !exists {
-			errorhandler.HandleError(c, &errorhandler.AccessForbiddenError{
-				Message: "User data not found in context",
-			})
-			c.Abort()
-			return
-		}
+    return func(c *gin.Context) {
+        userData, exists := c.Get("user")
+        if !exists {
+            errorhandler.HandleError(c, &errorhandler.AccessForbiddenError{
+                Message: "User data not found in context",
+            })
+            c.Abort()
+            return
+        }
 
-		roleID := userData.(map[string]interface{})["role_id"]
-		roleAllowed := false
-		for _, allowedRole := range allowedRoles {
-			if roleID == allowedRole {
-				roleAllowed = true
-				break
-			}
-		}
+        roleID := userData.(map[string]interface{})["role_id"]
+        roleAllowed := false
+        for _, allowedRole := range allowedRoles {
+            if roleID == allowedRole {
+                roleAllowed = true
+                break
+            }
+        }
 
-		if !roleAllowed {
-			errorhandler.HandleError(c, &errorhandler.AccessForbiddenError{
-				Message: "Access forbidden: Role not allowed",
-			})
-			c.Abort()
-			return
-		}
+        if !roleAllowed {
+            errorhandler.HandleError(c, &errorhandler.AccessForbiddenError{
+                Message: "Access forbidden: Role not allowed",
+            })
+            c.Abort()
+            return
+        }
 
-		c.Next()
-	}
+        c.Next()
+    }
 }
 
 var HrAuth = authorization([]int64{1})
 var VendorAuth = authorization([]int64{2})
 ```
-
-
 
 ## Endpoints
 
@@ -120,6 +115,26 @@ var VendorAuth = authorization([]int64{2})
 | Get All booking events        | GET    | *baseUrl*/api/event/vendor                 | yes                 |                                                                    |
 | Confirm Date                  | Patch  | *baseUrl*/api/event/vendor/event_id        | yes                 | confirmed_date: "DD/MM/YYYY"                                       |
 | Reject Dates                  |        | *baseUrl*/api/event/vendor/reject/event_id | yes                 | remark: string                                                     |
+
+## User for testing
+
+###### Role vendor
+
+```json
+{
+    "name": "vendor 1",
+    "password": "abc123"
+}
+```
+
+###### Role HR
+
+```json
+{
+    "name": "hr company 1",
+    "password": "abc123",
+}
+```
 
 
 

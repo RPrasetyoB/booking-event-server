@@ -1087,6 +1087,78 @@
                 ]
             }
         },
+        "/api/event/fcgffc9a48": {
+            "get": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "event by ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Fri, 13 Dec 2024 07:59:18 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 379
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "Event retrieved successfully",
+                                    "data": {
+                                        "id": "fcgffc9a48",
+                                        "event_name": "meeting",
+                                        "proposed_dates": [
+                                            "04-12-2024",
+                                            "05-12-2024",
+                                            "06-12-2024"
+                                        ],
+                                        "location": "jakarta",
+                                        "status": "accepted",
+                                        "user_id": "b730agdee3",
+                                        "user_name": "hr company 1",
+                                        "confirmed_date": "2024-12-06T00:00:00Z",
+                                        "created_at": "2024-12-13T02:25:12Z",
+                                        "updated_at": "2024-12-13T02:26:38Z"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/": {
             "get": {
                 "tags": [
