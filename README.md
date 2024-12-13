@@ -12,9 +12,10 @@ This API provides endpoints for managing a Booking event application. It allows 
 - **JWT**: Utilized for generating and verifying JSON Web Tokens for authentication.
 - **bcryptjs**: Used for securely hashing passwords.
 
-### Postman Documentation
+### Documentation
 
-[postman](https://documenter.getpostman.com/view/36914326/2sAYHxnPdy)
+- [postman](https://documenter.getpostman.com/view/36914326/2sAYHxnPdy)
+- [swagger](http://localhost:5000/swagger/index.htm) (Server must running locally)
 
 ## Prerequisites
 
