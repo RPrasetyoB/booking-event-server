@@ -36,7 +36,7 @@ func main() {
 		c.JSON(200, gin.H{
 			"success": true,
 			"message": "welcome to RPB Api",
-			"version": "1.1.0",
+			"version": "1.0.0",
 		})
 	})
 
