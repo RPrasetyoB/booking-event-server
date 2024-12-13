@@ -24,4 +24,5 @@ func EventRouter(api *gin.RouterGroup) {
 	event.DELETE("/:id", middleware.Authentication, eventController.DeleteEventByID)
 	event.GET("/vendor", middleware.Authentication, middleware.VendorAuth, eventController.GetAllEventsVendor)
 	event.PATCH("/vendor/:id", middleware.Authentication, middleware.VendorAuth, eventController.ConfirmDate)
+	event.PATCH("/vendor/reject/:id", middleware.Authentication, middleware.VendorAuth, eventController.RejectDates)
 }

@@ -13,11 +13,12 @@ import (
 
 type EventService interface {
 	CreateEvent(req *dto.CreaEventRequest, userId string) (*dto.EventResponse, error)
-	GetAllEventsHRByUserID(userID string) ([]*dto.EventResponse, error)
+	GetAllEventsHRByUserID(userID string) ([]*dto.GetEventResponse, error)
 	UpdateEventHR(req *dto.CreaEventRequest, userID string, eventID string) (*dto.EventResponse, error)
 	DeleteEvent(eventID string) error
-	GetAllEvents() ([]*dto.EventResponse, error)
-	UpdateEventVendor(req *dto.ConfirmDateRequest, eventID string) (*dto.EventResponse, error)
+	GetAllEvents() ([]*dto.GetEventResponse, error)
+	AcceptEventVendor(req *dto.ConfirmDateRequest, eventID string) (*dto.EventResponse, error)
+	RejectEventVendor(req *dto.RejectRequest, eventID string) (*dto.EventResponse, error)
 }
 
 type eventService struct {
@@ -83,6 +84,7 @@ func (s *eventService) CreateEvent(req *dto.CreaEventRequest, userID string) (*d
 		Proposed_dates: req.Proposed_dates,
 		Location:       createdEvent.Location,
 		User_id:        createdEvent.User_id,
+		Status:         createdEvent.Status,
 		Confirmed_date: createdEvent.Confirmed_date,
 		Created_at:     createdEvent.Created_at,
 		Updated_at:     createdEvent.Updated_at,
@@ -91,15 +93,21 @@ func (s *eventService) CreateEvent(req *dto.CreaEventRequest, userID string) (*d
 	return response, nil
 }
 
-func (s *eventService) GetAllEventsHRByUserID(userID string) ([]*dto.EventResponse, error) {
+func (s *eventService) GetAllEventsHRByUserID(userID string) ([]*dto.GetEventResponse, error) {
 	events, err := s.repoEvent.GetEventByUserID(userID)
 	if err != nil {
 		return nil, &errorhandler.InternalServerError{
 			Message: err.Error(),
 		}
 	}
+	user, err := s.repoUser.FindUserById(userID)
+	if err != nil {
+		return nil, &errorhandler.InternalServerError{
+			Message: err.Error(),
+		}
+	}
 
-	var response []*dto.EventResponse
+	var response []*dto.GetEventResponse
 	for _, event := range events {
 		dates, err := s.repoDates.GetDatesByEventID(event.ID)
 		if err != nil {
@@ -113,12 +121,14 @@ func (s *eventService) GetAllEventsHRByUserID(userID string) ([]*dto.EventRespon
 			dateStrings = append(dateStrings, date.Date.Format("02-01-2006"))
 		}
 
-		eventResponse := &dto.EventResponse{
+		eventResponse := &dto.GetEventResponse{
 			ID:             event.ID,
 			Event_name:     event.Event_name,
 			Proposed_dates: dateStrings,
 			Location:       event.Location,
+			Status:         event.Status,
 			User_id:        event.User_id,
+			User_name:      &user.Name,
 			Confirmed_date: event.Confirmed_date,
 			Created_at:     event.Created_at,
 			Updated_at:     event.Updated_at,
@@ -202,6 +212,7 @@ func (s *eventService) UpdateEventHR(req *dto.CreaEventRequest, userID string, e
 		Event_name:     updatedEvent.Event_name,
 		Proposed_dates: req.Proposed_dates,
 		Location:       updatedEvent.Location,
+		Status:         updatedEvent.Status,
 		User_id:        updatedEvent.User_id,
 		Confirmed_date: updatedEvent.Confirmed_date,
 		Created_at:     updatedEvent.Created_at,
@@ -239,7 +250,7 @@ func (s *eventService) DeleteEvent(eventID string) error {
 	return nil
 }
 
-func (s *eventService) GetAllEvents() ([]*dto.EventResponse, error) {
+func (s *eventService) GetAllEvents() ([]*dto.GetEventResponse, error) {
 	events, err := s.repoEvent.GetAllEvent()
 	if err != nil {
 		return nil, &errorhandler.InternalServerError{
@@ -247,7 +258,7 @@ func (s *eventService) GetAllEvents() ([]*dto.EventResponse, error) {
 		}
 	}
 
-	var response []*dto.EventResponse
+	var response []*dto.GetEventResponse
 	for _, event := range events {
 		dates, err := s.repoDates.GetDatesByEventID(event.ID)
 		if err != nil {
@@ -268,11 +279,12 @@ func (s *eventService) GetAllEvents() ([]*dto.EventResponse, error) {
 			dateStrings = append(dateStrings, date.Date.Format("02-01-2006"))
 		}
 
-		eventResponse := &dto.EventResponse{
+		eventResponse := &dto.GetEventResponse{
 			ID:             event.ID,
 			Event_name:     event.Event_name,
 			Proposed_dates: dateStrings,
 			Location:       event.Location,
+			Status:         event.Status,
 			User_id:        event.User_id,
 			User_name:      &user.Name,
 			Confirmed_date: event.Confirmed_date,
@@ -285,7 +297,7 @@ func (s *eventService) GetAllEvents() ([]*dto.EventResponse, error) {
 	return response, nil
 }
 
-func (s *eventService) UpdateEventVendor(req *dto.ConfirmDateRequest, eventID string) (*dto.EventResponse, error) {
+func (s *eventService) AcceptEventVendor(req *dto.ConfirmDateRequest, eventID string) (*dto.EventResponse, error) {
 	parsedDate, err := time.Parse("02-01-2006", req.Confirmed_date)
 	if err != nil {
 		return nil, &errorhandler.InternalServerError{
@@ -293,7 +305,7 @@ func (s *eventService) UpdateEventVendor(req *dto.ConfirmDateRequest, eventID st
 		}
 	}
 
-	updatedEvent, err := s.repoEvent.PatchEventByID(eventID, parsedDate)
+	updatedEvent, err := s.repoEvent.PatchConfirmEventByID(eventID, parsedDate)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, &errorhandler.NotFoundError{
@@ -346,6 +358,79 @@ func (s *eventService) UpdateEventVendor(req *dto.ConfirmDateRequest, eventID st
 		Event_name:     updatedEvent.Event_name,
 		Proposed_dates: dateStrings,
 		Location:       updatedEvent.Location,
+		Status:         updatedEvent.Status,
+		User_id:        updatedEvent.User_id,
+		Confirmed_date: updatedEvent.Confirmed_date,
+		Created_at:     updatedEvent.Created_at,
+		Updated_at:     updatedEvent.Updated_at,
+	}
+
+	return response, nil
+}
+
+func (s *eventService) RejectEventVendor(req *dto.RejectRequest, eventID string) (*dto.EventResponse, error) {
+	getEvent, err := s.repoEvent.GetEventByID(eventID)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, &errorhandler.NotFoundError{
+				Message: "Event not found",
+			}
+		}
+		return nil, &errorhandler.InternalServerError{
+			Message: err.Error(),
+		}
+	}
+	if getEvent.Confirmed_date != nil {
+		return nil, &errorhandler.BadRequestError{
+			Message: "Event's date accepted already, cannot be reject",
+		}
+	}
+
+	updatedEvent, _ := s.repoEvent.PatchRejectEventByID(eventID, req.Remark)
+
+	dates, err := s.repoDates.GetDatesByEventID(eventID)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, &errorhandler.NotFoundError{
+				Message: "Event not found",
+			}
+		}
+		return nil, &errorhandler.InternalServerError{
+			Message: err.Error(),
+		}
+	}
+
+	err = s.repoDates.DeleteDatesByEventID(eventID)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, &errorhandler.InternalServerError{
+			Message: "Failed to delete existing proposed dates",
+		}
+	}
+
+	var dateStrings []string
+	for _, date := range dates {
+		nanoid, _ := helper.GenerateNanoId()
+		proposedDate := entity.ProposedDates{
+			ID:       nanoid,
+			Date:     date.Date,
+			Event_id: eventID,
+		}
+		newDate, err := s.repoDates.CreateDates(&proposedDate)
+		if err != nil {
+			return nil, &errorhandler.InternalServerError{
+				Message: err.Error(),
+			}
+		}
+		dateStrings = append(dateStrings, newDate.Date.Format("02-01-2006"))
+	}
+
+	response := &dto.EventResponse{
+		ID:             updatedEvent.ID,
+		Event_name:     updatedEvent.Event_name,
+		Proposed_dates: dateStrings,
+		Location:       updatedEvent.Location,
+		Status:         updatedEvent.Status,
+		Remark:         updatedEvent.Remark,
 		User_id:        updatedEvent.User_id,
 		Confirmed_date: updatedEvent.Confirmed_date,
 		Created_at:     updatedEvent.Created_at,

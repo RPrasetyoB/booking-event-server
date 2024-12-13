@@ -15,7 +15,8 @@ type EventRepository interface {
 	GetEventByStatus(status string) ([]*entity.Event, error)
 	PutEventByID(eventID string, event entity.Event) (*entity.Event, error)
 	DeleteEventByID(eventID string) error
-	PatchEventByID(eventID string, confirmedDate time.Time) (*entity.Event, error)
+	PatchConfirmEventByID(eventID string, confirmedDate time.Time) (*entity.Event, error)
+	PatchRejectEventByID(eventID string, remark string) (*entity.Event, error)
 }
 
 type eventRepository struct {
@@ -47,13 +48,13 @@ func (r eventRepository) GetEventByUserID(userID string) ([]*entity.Event, error
 }
 
 func (r eventRepository) GetEventByID(eventID string) (*entity.Event, error) {
-	var events *entity.Event
-	err := r.db.First("id = ?", eventID).Error
+	var event entity.Event
+	err := r.db.Where("id = ?", eventID).First(&event).Error
 	if err != nil {
 		return nil, err
 	}
 
-	return events, nil
+	return &event, nil
 }
 
 func (r eventRepository) GetAllEvent() ([]*entity.Event, error) {
@@ -104,8 +105,33 @@ func (r eventRepository) DeleteEventByID(eventID string) error {
 	return nil
 }
 
-func (r eventRepository) PatchEventByID(eventID string, confirmedDate time.Time) (*entity.Event, error) {
-	err := r.db.Model(&entity.Event{}).Where("id = ?", eventID).Update("confirmed_date", confirmedDate).Error
+func (r eventRepository) PatchConfirmEventByID(eventID string, confirmedDate time.Time) (*entity.Event, error) {
+	err := r.db.Model(&entity.Event{}).
+		Where("id = ?", eventID).
+		Updates(map[string]interface{}{
+			"confirmed_date": confirmedDate,
+			"status":         "accepted",
+		}).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var updatedEvent entity.Event
+	err = r.db.Where("id = ?", eventID).First(&updatedEvent).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedEvent, nil
+}
+
+func (r eventRepository) PatchRejectEventByID(eventID string, remark string) (*entity.Event, error) {
+	err := r.db.Model(&entity.Event{}).
+		Where("id = ?", eventID).
+		Updates(map[string]interface{}{
+			"remark": remark,
+			"status": "rejected",
+		}).Error
 	if err != nil {
 		return nil, err
 	}

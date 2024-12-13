@@ -7,7 +7,7 @@ type Event struct {
 	Event_name     string
 	Location       string
 	User_id        string
-	Status         string
+	Status         string `gorm:"default:'pending'"`
 	Remark         *string
 	Confirmed_date *time.Time `gorm:"type:date"`
 	Created_at     time.Time  `gorm:"type:timestamp;autoCreateTime"`

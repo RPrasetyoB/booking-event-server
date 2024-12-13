@@ -201,7 +201,7 @@ func (e *eventController) ConfirmDate(c *gin.Context) {
 		})
 		return
 	}
-	updatedEvent, err := e.service.UpdateEventVendor(&confirmeDate, eventID)
+	updatedEvent, err := e.service.AcceptEventVendor(&confirmeDate, eventID)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return
@@ -209,6 +209,39 @@ func (e *eventController) ConfirmDate(c *gin.Context) {
 	res := helper.Response(dto.ResponseParams{
 		StatusCode: http.StatusOK,
 		Message:    "Date confirmed Successfully",
+		Data:       updatedEvent,
+	})
+
+	c.JSON(http.StatusOK, res)
+}
+
+func (e *eventController) RejectDates(c *gin.Context) {
+	var rejectDate *dto.RejectRequest
+	eventID := c.Param("id")
+	if err := c.ShouldBindJSON(&rejectDate); err != nil {
+		errorhandler.HandleError(c, &errorhandler.BadRequestError{
+			Message: "Payload type invalid",
+		})
+		return
+	}
+
+	validate := validator.New()
+	err := validate.Struct(rejectDate)
+	if err != nil {
+		errorMsg := helper.GetErrorMessage(err)
+		errorhandler.HandleError(c, &errorhandler.BadRequestError{
+			Message: errorMsg,
+		})
+		return
+	}
+	updatedEvent, err := e.service.RejectEventVendor(rejectDate, eventID)
+	if err != nil {
+		errorhandler.HandleError(c, err)
+		return
+	}
+	res := helper.Response(dto.ResponseParams{
+		StatusCode: http.StatusOK,
+		Message:    "Dates rejected Successfully",
 		Data:       updatedEvent,
 	})
 

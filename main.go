@@ -2,12 +2,28 @@ package main
 
 import (
 	"booking-event-server/config"
+	"booking-event-server/docs"
 	"booking-event-server/router"
 	"fmt"
 	"os"
 
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/gin-gonic/gin"
 )
+
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /example/helloworld [get]
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
@@ -15,11 +31,17 @@ func main() {
 	config.LoadDB()
 
 	r := gin.New()
+	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "pong",
+			"success": true,
+			"message": "welcome to RPB Api",
+			"version": "1.1.0",
 		})
 	})
+
+	url := ginSwagger.URL("http://localhost:5000/swagger/doc.json")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url))
 
 	api := r.Group("/api")
 	r.SetTrustedProxies([]string{"127.0.0.1"})
