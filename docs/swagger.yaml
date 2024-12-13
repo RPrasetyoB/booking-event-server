@@ -1,1047 +1,663 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: booking-event
   version: 1.0.0
-  contact: {}
 servers:
-  - url: '{{base_url}}'
-  - url: https://api.getpostman.com
+  - url: http://localhost:5000
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: auth
+  - name: event
+  - name: event > HR
+  - name: event > Vendor
 paths:
   /api/auth/register:
     post:
       tags:
         - auth
       summary: register
-      description: register
-      operationId: register
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              properties:
-                name:
-                  type: string
-                  example: PT indah maju
-                password:
-                  type: string
-                  example: ab
-                role:
-                  type: string
-                  example: vendor
-            examples:
-              register:
-                value:
-                  name: PT indah maju
-                  password: ab
-                  role: vendor
+              example:
+                name: vendor 1
+                role: vendor
+                password: abc123
       responses:
         '201':
-          description: success
+          description: Created
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '68'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Wed, 11 Dec 2024 13:25:20 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '68'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 201
-                  message:
-                    type: string
-                    example: User registered successfully
-                  success:
-                    type: boolean
-                    example: true
-              examples:
-                success:
-                  value:
-                    code: 201
-                    message: User registered successfully
-                    success: true
+              example:
+                code: 201
+                success: true
+                message: User registered successfully
         '400':
-          description: required / role invalid / password min
+          description: Bad Request
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '84'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
-                example: Wed, 11 Dec 2024 13:22:21 GMT
+                example: Wed, 11 Dec 2024 13:20:48 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '57'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 400
-                  message:
-                    type: string
-                    example: Name is required
-                  success:
-                    type: boolean
-                    example: false
               examples:
-                password min:
+                example-0:
+                  summary: required
                   value:
                     code: 400
-                    message: Password must be at least 6 characters long
                     success: false
-                required:
-                  value:
-                    code: 400
                     message: Name is required
-                    success: false
-                role invalid:
+                example-1:
+                  summary: role invalid
                   value:
                     code: 400
-                    message: Role must be 'hr' or 'vendor'
                     success: false
+                    message: Role must be 'hr' or 'vendor'
+                example-2:
+                  summary: password min
+                  value:
+                    code: 400
+                    success: false
+                    message: Password must be at least 6 characters long
   /api/auth/login:
     post:
       tags:
         - auth
       summary: login
-      description: login
-      operationId: login
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              properties:
-                name:
-                  type: string
-                  example: hr company 1
-                password:
-                  type: string
-                  example: abc12
-            examples:
-              login:
-                value:
-                  name: hr company 1
-                  password: abc12
+              example:
+                name: hr company 1
+                password: abc123
       responses:
         '202':
-          description: success
+          description: Accepted
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '214'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Wed, 11 Dec 2024 13:25:54 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '214'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 202
-                  message:
-                    type: string
-                    example: User logged in successfully
-                  success:
-                    type: boolean
-                    example: true
-                  token:
-                    type: string
-                    example: >-
-                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQxODI3NTQsInVzZXJfaWQiOiJiNzMwYWdkZWUzIn0.RkLjHjko1LgVMEMdTXf2uD7IAAg-9xytO-exe2FHYhc
-              examples:
-                success:
-                  value:
-                    code: 202
-                    message: User logged in successfully
-                    success: true
-                    token: >-
-                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQxODI3NTQsInVzZXJfaWQiOiJiNzMwYWdkZWUzIn0.RkLjHjko1LgVMEMdTXf2uD7IAAg-9xytO-exe2FHYhc
+              example:
+                code: 202
+                success: true
+                message: User logged in successfully
+                token: >-
+                  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQxODI3NTQsInVzZXJfaWQiOiJiNzMwYWdkZWUzIn0.RkLjHjko1LgVMEMdTXf2uD7IAAg-9xytO-exe2FHYhc
         '400':
-          description: invalid
+          description: Bad Request
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '65'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Wed, 11 Dec 2024 13:26:06 GMT
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: number
-                    example: 400
-                  message:
-                    type: string
-                    example: name or password invalid
-                  success:
-                    type: boolean
-                    example: false
-              examples:
-                invalid:
-                  value:
-                    code: 400
-                    message: name or password invalid
-                    success: false
-  /api/event/hr:
-    get:
-      tags:
-        - event
-        - HR
-      summary: get events HR
-      description: get events HR
-      operationId: getEventsHr
-      responses:
-        '200':
-          description: success
-          headers:
             Content-Length:
               schema:
-                type: string
-                example: '1030'
-            Date:
-              schema:
-                type: string
-                example: Thu, 12 Dec 2024 08:39:35 GMT
+                type: integer
+                example: '65'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        confirmed_date:
-                          nullable: true
-                          example: null
-                        created_at:
-                          type: string
-                          example: '2024-12-12T13:31:10Z'
-                        event_name:
-                          type: string
-                          example: survey
-                        id:
-                          type: string
-                          example: 30f1d3aa27
-                        location:
-                          type: string
-                          example: bandung
-                        proposed_dates:
-                          type: array
-                          items:
-                            type: string
-                            example: 01-12-2024
-                          example:
-                            - 01-12-2024
-                            - 02-12-2024
-                            - 03-12-2024
-                        updated_at:
-                          type: string
-                          example: '2024-12-12T13:31:10Z'
-                        user_id:
-                          type: string
-                          example: b730agdee3
-                    example:
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:31:10Z'
-                        event_name: survey
-                        id: 30f1d3aa27
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:31:10Z'
-                        user_id: b730agdee3
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:32:19Z'
-                        event_name: survey
-                        id: 37e25b2d2f
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:32:19Z'
-                        user_id: b730agdee3
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:34:13Z'
-                        event_name: survey
-                        id: 33ad1abf05
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:34:13Z'
-                        user_id: b730agdee3
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:55:01Z'
-                        event_name: survey
-                        id: age3d4f03d
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:55:01Z'
-                        user_id: b730agdee3
-                  message:
-                    type: string
-                    example: Events retrieved successfully
-                  success:
-                    type: boolean
-                    example: true
-              examples:
-                success:
-                  value:
-                    code: 200
-                    data:
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:31:10Z'
-                        event_name: survey
-                        id: 30f1d3aa27
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:31:10Z'
-                        user_id: b730agdee3
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:32:19Z'
-                        event_name: survey
-                        id: 37e25b2d2f
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:32:19Z'
-                        user_id: b730agdee3
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:34:13Z'
-                        event_name: survey
-                        id: 33ad1abf05
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:34:13Z'
-                        user_id: b730agdee3
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:55:01Z'
-                        event_name: survey
-                        id: age3d4f03d
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:55:01Z'
-                        user_id: b730agdee3
-                    message: Events retrieved successfully
-                    success: true
-      security:
-        - bearerAuth: []
+              example:
+                code: 400
+                success: false
+                message: name or password invalid
+  /api/event/hr:
     post:
       tags:
-        - event
-        - HR
+        - event > HR
       summary: create event booking
-      description: create event booking
-      operationId: createEventBooking
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              properties:
-                event_name:
-                  type: number
-                  example: 1
-                location:
-                  type: string
-                  example: bandung
+              example:
+                event_name: meeting
                 proposed_dates:
-                  type: array
-                  items:
-                    type: string
-                    example: 01-12-2024
-                  example:
-                    - 01-12-2024
-                    - 02-12-2024
-                    - 03-12-2024
-            examples:
-              create event booking:
-                value:
-                  event_name: 1
-                  location: bandung
-                  proposed_dates:
-                    - 01-12-2024
-                    - 02-12-2024
-                    - 03-12-2024
+                  - 04-12-2024
+                  - 05-12-2024
+                  - 06-12-2024
+                location: jakarta
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: success
+          description: OK
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '337'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Thu, 12 Dec 2024 06:34:13 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '337'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      confirmed_date:
-                        nullable: true
-                        example: null
-                      created_at:
-                        type: string
-                        example: '2024-12-12T13:34:12.6091574+07:00'
-                      event_name:
-                        type: string
-                        example: survey
-                      id:
-                        type: string
-                        example: 33ad1abf05
-                      location:
-                        type: string
-                        example: bandung
-                      proposed_dates:
-                        type: array
-                        items:
-                          type: string
-                          example: 01-12-2024
-                        example:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                      updated_at:
-                        type: string
-                        example: '2024-12-12T13:34:12.6091574+07:00'
-                      user_id:
-                        type: string
-                        example: b730agdee3
-                  message:
-                    type: string
-                    example: Event created Successfully
-                  success:
-                    type: boolean
-                    example: true
-              examples:
-                success:
-                  value:
-                    code: 200
-                    data:
-                      confirmed_date: null
-                      created_at: '2024-12-12T13:34:12.6091574+07:00'
-                      event_name: survey
-                      id: 33ad1abf05
-                      location: bandung
-                      proposed_dates:
-                        - 01-12-2024
-                        - 02-12-2024
-                        - 03-12-2024
-                      updated_at: '2024-12-12T13:34:12.6091574+07:00'
-                      user_id: b730agdee3
-                    message: Event created Successfully
-                    success: true
+              example:
+                code: 200
+                success: true
+                message: Event created Successfully
+                data:
+                  id: 33ad1abf05
+                  event_name: survey
+                  proposed_dates:
+                    - 01-12-2024
+                    - 02-12-2024
+                    - 03-12-2024
+                  location: bandung
+                  user_id: b730agdee3
+                  confirmed_date: null
+                  created_at: '2024-12-12T13:34:12.6091574+07:00'
+                  updated_at: '2024-12-12T13:34:12.6091574+07:00'
         '400':
-          description: required / payload invalid
+          description: Bad Request
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '61'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
-                example: Thu, 12 Dec 2024 06:35:47 GMT
+                example: Thu, 12 Dec 2024 06:35:26 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '61'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 400
-                  message:
-                    type: string
-                    example: location is required
-                  success:
-                    type: boolean
-                    example: false
               examples:
-                payload invalid:
+                example-0:
+                  summary: required
                   value:
                     code: 400
-                    message: Payload type invalid
                     success: false
-                required:
-                  value:
-                    code: 400
                     message: location is required
+                example-1:
+                  summary: payload invalid
+                  value:
+                    code: 400
                     success: false
+                    message: Payload type invalid
+    get:
+      tags:
+        - event > HR
+      summary: get events HR
       security:
         - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Date:
+              schema:
+                type: string
+                example: Thu, 12 Dec 2024 08:39:35 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '1030'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: 200
+                success: true
+                message: Events retrieved successfully
+                data:
+                  - id: 30f1d3aa27
+                    event_name: survey
+                    proposed_dates:
+                      - 01-12-2024
+                      - 02-12-2024
+                      - 03-12-2024
+                    location: bandung
+                    user_id: b730agdee3
+                    confirmed_date: null
+                    created_at: '2024-12-12T13:31:10Z'
+                    updated_at: '2024-12-12T13:31:10Z'
+                  - id: 37e25b2d2f
+                    event_name: survey
+                    proposed_dates:
+                      - 01-12-2024
+                      - 02-12-2024
+                      - 03-12-2024
+                    location: bandung
+                    user_id: b730agdee3
+                    confirmed_date: null
+                    created_at: '2024-12-12T13:32:19Z'
+                    updated_at: '2024-12-12T13:32:19Z'
+                  - id: 33ad1abf05
+                    event_name: survey
+                    proposed_dates:
+                      - 01-12-2024
+                      - 02-12-2024
+                      - 03-12-2024
+                    location: bandung
+                    user_id: b730agdee3
+                    confirmed_date: null
+                    created_at: '2024-12-12T13:34:13Z'
+                    updated_at: '2024-12-12T13:34:13Z'
+                  - id: age3d4f03d
+                    event_name: survey
+                    proposed_dates:
+                      - 01-12-2024
+                      - 02-12-2024
+                      - 03-12-2024
+                    location: bandung
+                    user_id: b730agdee3
+                    confirmed_date: null
+                    created_at: '2024-12-12T13:55:01Z'
+                    updated_at: '2024-12-12T13:55:01Z'
   /api/event/hr/33ad1abf05:
     put:
       tags:
-        - event
-        - HR
+        - event > HR
       summary: update event
-      description: update event
-      operationId: updateEvent
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              properties:
-                event_name:
-                  type: string
-                  example: survey2
-                location:
-                  type: string
-                  example: jakarta
+              example:
+                event_name: survey2
                 proposed_dates:
-                  type: array
-                  items:
-                    type: string
-                    example: 02-12-2024
-                  example:
-                    - 02-12-2024
-                    - 03-12-2024
-                    - 04-12-2024
-            examples:
-              update event:
-                value:
-                  event_name: survey2
-                  location: jakarta
-                  proposed_dates:
-                    - 02-12-2024
-                    - 03-12-2024
-                    - 04-12-2024
+                  - 02-12-2024
+                  - 03-12-2024
+                  - 04-12-2024
+                location: jakarta
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: success
+          description: OK
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '312'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Thu, 12 Dec 2024 09:08:33 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '312'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      confirmed_date:
-                        nullable: true
-                        example: null
-                      created_at:
-                        type: string
-                        example: '2024-12-12T13:31:10Z'
-                      event_name:
-                        type: string
-                        example: survey2
-                      id:
-                        type: string
-                        example: 30f1d3aa27
-                      location:
-                        type: string
-                        example: jakarta
-                      proposed_dates:
-                        type: array
-                        items:
-                          type: string
-                          example: 02-12-2024
-                        example:
-                          - 02-12-2024
-                          - 03-12-2024
-                          - 04-12-2024
-                      updated_at:
-                        type: string
-                        example: '2024-12-12T16:08:33Z'
-                      user_id:
-                        type: string
-                        example: b730agdee3
-                  message:
-                    type: string
-                    example: Event created Successfully
-                  success:
-                    type: boolean
-                    example: true
-              examples:
-                success:
-                  value:
-                    code: 200
-                    data:
-                      confirmed_date: null
-                      created_at: '2024-12-12T13:31:10Z'
-                      event_name: survey2
-                      id: 30f1d3aa27
-                      location: jakarta
-                      proposed_dates:
-                        - 02-12-2024
-                        - 03-12-2024
-                        - 04-12-2024
-                      updated_at: '2024-12-12T16:08:33Z'
-                      user_id: b730agdee3
-                    message: Event created Successfully
-                    success: true
+              example:
+                code: 200
+                success: true
+                message: Event created Successfully
+                data:
+                  id: 30f1d3aa27
+                  event_name: survey2
+                  proposed_dates:
+                    - 02-12-2024
+                    - 03-12-2024
+                    - 04-12-2024
+                  location: jakarta
+                  user_id: b730agdee3
+                  confirmed_date: null
+                  created_at: '2024-12-12T13:31:10Z'
+                  updated_at: '2024-12-12T16:08:33Z'
         '404':
-          description: not found
+          description: Not Found
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '56'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Thu, 12 Dec 2024 09:28:47 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '56'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 404
-                  message:
-                    type: string
-                    example: Event not found
-                  success:
-                    type: boolean
-                    example: false
-              examples:
-                not found:
-                  value:
-                    code: 404
-                    message: Event not found
-                    success: false
-      security:
-        - bearerAuth: []
+              example:
+                code: 404
+                success: false
+                message: Event not found
   /api/event/37e25b2d2f:
     delete:
       tags:
-        - event
-        - HR
+        - event > HR
       summary: delete event
-      description: delete event
-      operationId: deleteEvent
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: success
+          description: OK
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '66'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Thu, 12 Dec 2024 09:32:41 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '66'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 200
-                  message:
-                    type: string
-                    example: Event deleted Successfully
-                  success:
-                    type: boolean
-                    example: true
-              examples:
-                success:
-                  value:
-                    code: 200
-                    message: Event deleted Successfully
-                    success: true
+              example:
+                code: 200
+                success: true
+                message: Event deleted Successfully
         '404':
-          description: not found
+          description: Not Found
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '56'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Thu, 12 Dec 2024 09:28:35 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '56'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 404
-                  message:
-                    type: string
-                    example: Event not found
-                  success:
-                    type: boolean
-                    example: false
-              examples:
-                not found:
-                  value:
-                    code: 404
-                    message: Event not found
-                    success: false
-      security:
-        - bearerAuth: []
+              example:
+                code: 404
+                success: false
+                message: Event not found
   /api/event/vendor:
     get:
       tags:
-        - event
-        - Vendor
+        - event > Vendor
       summary: get all events
-      description: get all events
-      operationId: getAllEvents
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: success
+          description: OK
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '608'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Thu, 12 Dec 2024 10:01:20 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '608'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        confirmed_date:
-                          nullable: true
-                          example: null
-                        created_at:
-                          type: string
-                          example: '2024-12-12T13:34:13Z'
-                        event_name:
-                          type: string
-                          example: survey
-                        id:
-                          type: string
-                          example: 33ad1abf05
-                        location:
-                          type: string
-                          example: bandung
-                        proposed_dates:
-                          type: array
-                          items:
-                            type: string
-                            example: 01-12-2024
-                          example:
-                            - 01-12-2024
-                            - 02-12-2024
-                            - 03-12-2024
-                        updated_at:
-                          type: string
-                          example: '2024-12-12T13:34:13Z'
-                        user_id:
-                          type: string
-                          example: b730agdee3
-                        user_name:
-                          type: string
-                          example: hr company 1
-                    example:
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:34:13Z'
-                        event_name: survey
-                        id: 33ad1abf05
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:34:13Z'
-                        user_id: b730agdee3
-                        user_name: hr company 1
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:55:01Z'
-                        event_name: survey
-                        id: age3d4f03d
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:55:01Z'
-                        user_id: b730agdee3
-                        user_name: hr company 1
-                  message:
-                    type: string
-                    example: Events retrieved Successfully
-                  success:
-                    type: boolean
-                    example: true
-              examples:
-                success:
-                  value:
-                    code: 200
-                    data:
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:34:13Z'
-                        event_name: survey
-                        id: 33ad1abf05
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:34:13Z'
-                        user_id: b730agdee3
-                        user_name: hr company 1
-                      - confirmed_date: null
-                        created_at: '2024-12-12T13:55:01Z'
-                        event_name: survey
-                        id: age3d4f03d
-                        location: bandung
-                        proposed_dates:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                        updated_at: '2024-12-12T13:55:01Z'
-                        user_id: b730agdee3
-                        user_name: hr company 1
-                    message: Events retrieved Successfully
-                    success: true
-      security:
-        - bearerAuth: []
-  /api/event/vendor/33ad1abf05:
+              example:
+                code: 200
+                success: true
+                message: Events retrieved Successfully
+                data:
+                  - id: 33ad1abf05
+                    event_name: survey
+                    proposed_dates:
+                      - 01-12-2024
+                      - 02-12-2024
+                      - 03-12-2024
+                    location: bandung
+                    user_id: b730agdee3
+                    user_name: hr company 1
+                    confirmed_date: null
+                    created_at: '2024-12-12T13:34:13Z'
+                    updated_at: '2024-12-12T13:34:13Z'
+                  - id: age3d4f03d
+                    event_name: survey
+                    proposed_dates:
+                      - 01-12-2024
+                      - 02-12-2024
+                      - 03-12-2024
+                    location: bandung
+                    user_id: b730agdee3
+                    user_name: hr company 1
+                    confirmed_date: null
+                    created_at: '2024-12-12T13:55:01Z'
+                    updated_at: '2024-12-12T13:55:01Z'
+  /api/event/vendor/fcgffc9a48:
     patch:
       tags:
-        - event
-        - Vendor
+        - event > Vendor
       summary: confirm date
-      description: confirm date
-      operationId: confirmDate
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              properties:
-                confirmed_date:
-                  type: string
-                  example: 10-12-2024
-            examples:
-              confirm date:
-                value:
-                  confirmed_date: 10-12-2024
+              example:
+                confirmed_date: 06-12-2024
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: success
+          description: OK
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '387'
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Thu, 12 Dec 2024 14:05:15 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '387'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  code:
-                    type: number
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      confirmed_date:
-                        type: string
-                        example: '2024-12-10T00:00:00Z'
-                      created_at:
-                        type: string
-                        example: '2024-12-12T13:34:13Z'
-                      event_name:
-                        type: string
-                        example: survey2
-                      id:
-                        type: string
-                        example: 33ad1abf05
-                      location:
-                        type: string
-                        example: jakarta
-                      proposed_dates:
-                        type: array
-                        items:
-                          type: string
-                          example: 01-12-2024
-                        example:
-                          - 01-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                          - 02-12-2024
-                          - 03-12-2024
-                          - 04-12-2024
-                      updated_at:
-                        type: string
-                        example: '2024-12-12T21:05:15Z'
-                      user_id:
-                        type: string
-                        example: b730agdee3
-                      user_name:
-                        nullable: true
-                        example: null
-                  message:
-                    type: string
-                    example: Date confirmed Successfully
-                  success:
-                    type: boolean
-                    example: true
-              examples:
-                success:
-                  value:
-                    code: 200
-                    data:
-                      confirmed_date: '2024-12-10T00:00:00Z'
-                      created_at: '2024-12-12T13:34:13Z'
-                      event_name: survey2
-                      id: 33ad1abf05
-                      location: jakarta
-                      proposed_dates:
-                        - 01-12-2024
-                        - 02-12-2024
-                        - 03-12-2024
-                        - 02-12-2024
-                        - 03-12-2024
-                        - 04-12-2024
-                      updated_at: '2024-12-12T21:05:15Z'
-                      user_id: b730agdee3
-                      user_name: null
-                    message: Date confirmed Successfully
-                    success: true
+              example:
+                code: 200
+                success: true
+                message: Date confirmed Successfully
+                data:
+                  id: 33ad1abf05
+                  event_name: survey2
+                  proposed_dates:
+                    - 01-12-2024
+                    - 02-12-2024
+                    - 03-12-2024
+                    - 02-12-2024
+                    - 03-12-2024
+                    - 04-12-2024
+                  location: jakarta
+                  user_id: b730agdee3
+                  user_name: null
+                  confirmed_date: '2024-12-10T00:00:00Z'
+                  created_at: '2024-12-12T13:34:13Z'
+                  updated_at: '2024-12-12T21:05:15Z'
+  /api/event/vendor/reject/fcgffc9a48:
+    patch:
+      tags:
+        - event > Vendor
+      summary: reject dates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                remark: we have schedule at those dates
       security:
         - bearerAuth: []
-  /:
-    get:
-      summary: root
-      description: root
-      operationId: root
       responses:
         '200':
-          description: success
+          description: OK
           headers:
-            Content-Length:
+            Content-Type:
               schema:
                 type: string
-                example: '65'
+                example: application/json; charset=utf-8
+            Date:
+              schema:
+                type: string
+                example: Fri, 13 Dec 2024 04:37:40 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '375'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: 200
+                success: true
+                message: Dates rejected Successfully
+                data:
+                  id: 9cb8f7gc5f
+                  event_name: survey
+                  proposed_dates:
+                    - 01-12-2024
+                    - 02-12-2024
+                    - 03-12-2024
+                  location: bandung
+                  status: rejected
+                  user_id: b730agdee3
+                  remark: we have schedule at those dates
+                  confirmed_date: null
+                  created_at: '2024-12-13T02:24:29Z'
+                  updated_at: '2024-12-13T11:37:39Z'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Date:
+              schema:
+                type: string
+                example: Fri, 13 Dec 2024 04:37:53 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '88'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: 400
+                success: false
+                message: Event's date accepted already, cannot be reject
+  /:
+    get:
+      tags:
+        - default
+      summary: root
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
             Date:
               schema:
                 type: string
                 example: Thu, 12 Dec 2024 17:53:36 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '65'
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  message:
-                    type: string
-                    example: welcome to RPB Api
-                  success:
-                    type: boolean
-                    example: true
-                  version:
-                    type: string
-                    example: 1.1.0
-              examples:
-                success:
-                  value:
-                    message: welcome to RPB Api
-                    success: true
-                    version: 1.1.0
-  /collections/36914326-5f7f2987-17a8-4b72-99be-5c6952ae64df:
-    get:
-      summary: swagger
-      description: swagger
-      operationId: swagger
-      responses:
-        '200':
-          description: ''
-      security:
-        - apiKey: []
-components:
-  securitySchemes:
-    apiKey:
-      type: apiKey
-      name: X-API-Key
-      in: header
-    bearerAuth:
-      type: http
-      scheme: bearer
-security:
-  - apiKey: []
-tags:
-  - name: auth
-  - name: event
-  - name: HR
-  - name: Vendor
-
+              example:
+                message: welcome to RPB Api
+                success: true
+                version: 1.1.0
