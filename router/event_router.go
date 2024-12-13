@@ -20,6 +20,7 @@ func EventRouter(api *gin.RouterGroup) {
 	event := api.Group("/event")
 	event.POST("/hr", middleware.Authentication, eventController.CreateEvent)
 	event.GET("/hr", middleware.Authentication, middleware.HrAuth, eventController.GetEventsHRbyUserID)
+	event.GET("/:id", middleware.Authentication, eventController.GetEventbyID)
 	event.PUT("/hr/:id", middleware.Authentication, middleware.HrAuth, eventController.UpdateEventHR)
 	event.DELETE("/:id", middleware.Authentication, eventController.DeleteEventByID)
 	event.GET("/vendor", middleware.Authentication, middleware.VendorAuth, eventController.GetAllEventsVendor)

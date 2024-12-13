@@ -92,7 +92,7 @@ func (e *eventController) GetEventsHRbyUserID(c *gin.Context) {
 
 	if len(events) == 0 {
 		statusCode = http.StatusNotFound
-		msg = "Event not found"
+		msg = "No Event"
 	} else {
 		statusCode = http.StatusOK
 		msg = "Events retrieved successfully"
@@ -105,6 +105,23 @@ func (e *eventController) GetEventsHRbyUserID(c *gin.Context) {
 	})
 
 	c.JSON(statusCode, res)
+}
+
+func (e *eventController) GetEventbyID(c *gin.Context) {
+	eventID := c.Param("id")
+	event, err := e.service.GetEventByID(eventID)
+	if err != nil {
+		errorhandler.HandleError(c, err)
+		return
+	}
+
+	res := helper.Response(dto.ResponseParams{
+		StatusCode: http.StatusOK,
+		Message:    "Event retrieved successfully",
+		Data:       event,
+	})
+
+	c.JSON(http.StatusOK, res)
 }
 
 func (e *eventController) UpdateEventHR(c *gin.Context) {
