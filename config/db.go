@@ -8,7 +8,6 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 var DB *gorm.DB
@@ -27,7 +26,7 @@ func LoadDB() {
 	sqlInfo := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=require", host, user, password, dbName)
 
 	db, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		// Logger: logger.Default.LogMode(logger.Silent),
 	})
 
 	if err != nil {

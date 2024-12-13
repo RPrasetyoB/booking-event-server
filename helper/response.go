@@ -15,7 +15,7 @@ type ResponseWithoutData struct {
 	Code    int     `json:"code"`
 	Success bool    `json:"success"`
 	Message string  `json:"message"`
-	Token   *string `json:"token,omitempty"` // Optional token field
+	Token   *string `json:"token,omitempty"`
 }
 
 func Response(params dto.ResponseParams) any {

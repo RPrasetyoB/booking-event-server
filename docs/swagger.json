@@ -1,0 +1,1090 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "booking-event",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000"
+        }
+    ],
+    "tags": [
+        {
+            "name": "auth"
+        },
+        {
+            "name": "event"
+        },
+        {
+            "name": "event > HR"
+        },
+        {
+            "name": "event > Vendor"
+        }
+    ],
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "register",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "vendor 1",
+                                    "role": "vendor",
+                                    "password": "abc123"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Wed, 11 Dec 2024 13:25:20 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 68
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 201,
+                                    "success": true,
+                                    "message": "User registered successfully"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Wed, 11 Dec 2024 13:20:48 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 57
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "example-0": {
+                                        "summary": "required",
+                                        "value": {
+                                            "code": 400,
+                                            "success": false,
+                                            "message": "Name is required"
+                                        }
+                                    },
+                                    "example-1": {
+                                        "summary": "role invalid",
+                                        "value": {
+                                            "code": 400,
+                                            "success": false,
+                                            "message": "Role must be 'hr' or 'vendor'"
+                                        }
+                                    },
+                                    "example-2": {
+                                        "summary": "password min",
+                                        "value": {
+                                            "code": 400,
+                                            "success": false,
+                                            "message": "Password must be at least 6 characters long"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "hr company 1",
+                                    "password": "abc123"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Wed, 11 Dec 2024 13:25:54 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 214
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 202,
+                                    "success": true,
+                                    "message": "User logged in successfully",
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQxODI3NTQsInVzZXJfaWQiOiJiNzMwYWdkZWUzIn0.RkLjHjko1LgVMEMdTXf2uD7IAAg-9xytO-exe2FHYhc"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Wed, 11 Dec 2024 13:26:06 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 65
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 400,
+                                    "success": false,
+                                    "message": "name or password invalid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/event/hr": {
+            "get": {
+                "tags": [
+                    "event > HR"
+                ],
+                "summary": "get events HR",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 08:39:35 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 1030
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "Events retrieved successfully",
+                                    "data": [
+                                        {
+                                            "id": "30f1d3aa27",
+                                            "event_name": "survey",
+                                            "proposed_dates": [
+                                                "01-12-2024",
+                                                "02-12-2024",
+                                                "03-12-2024"
+                                            ],
+                                            "location": "bandung",
+                                            "user_id": "b730agdee3",
+                                            "created_at": "2024-12-12T13:31:10Z",
+                                            "updated_at": "2024-12-12T13:31:10Z"
+                                        },
+                                        {
+                                            "id": "37e25b2d2f",
+                                            "event_name": "survey",
+                                            "proposed_dates": [
+                                                "01-12-2024",
+                                                "02-12-2024",
+                                                "03-12-2024"
+                                            ],
+                                            "location": "bandung",
+                                            "user_id": "b730agdee3",
+                                            "created_at": "2024-12-12T13:32:19Z",
+                                            "updated_at": "2024-12-12T13:32:19Z"
+                                        },
+                                        {
+                                            "id": "33ad1abf05",
+                                            "event_name": "survey",
+                                            "proposed_dates": [
+                                                "01-12-2024",
+                                                "02-12-2024",
+                                                "03-12-2024"
+                                            ],
+                                            "location": "bandung",
+                                            "user_id": "b730agdee3",
+                                            "created_at": "2024-12-12T13:34:13Z",
+                                            "updated_at": "2024-12-12T13:34:13Z"
+                                        },
+                                        {
+                                            "id": "age3d4f03d",
+                                            "event_name": "survey",
+                                            "proposed_dates": [
+                                                "01-12-2024",
+                                                "02-12-2024",
+                                                "03-12-2024"
+                                            ],
+                                            "location": "bandung",
+                                            "user_id": "b730agdee3",
+                                            "created_at": "2024-12-12T13:55:01Z",
+                                            "updated_at": "2024-12-12T13:55:01Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "event > HR"
+                ],
+                "summary": "create event booking",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "event_name": "meeting",
+                                    "proposed_dates": [
+                                        "04-12-2024",
+                                        "05-12-2024",
+                                        "06-12-2024"
+                                    ],
+                                    "location": "jakarta"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 06:34:13 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 337
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "Event created Successfully",
+                                    "data": {
+                                        "id": "33ad1abf05",
+                                        "event_name": "survey",
+                                        "proposed_dates": [
+                                            "01-12-2024",
+                                            "02-12-2024",
+                                            "03-12-2024"
+                                        ],
+                                        "location": "bandung",
+                                        "user_id": "b730agdee3",
+                                        "created_at": "2024-12-12T13:34:12.6091574+07:00",
+                                        "updated_at": "2024-12-12T13:34:12.6091574+07:00"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 06:35:26 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 61
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "example-0": {
+                                        "summary": "required",
+                                        "value": {
+                                            "code": 400,
+                                            "success": false,
+                                            "message": "location is required"
+                                        }
+                                    },
+                                    "example-1": {
+                                        "summary": "payload invalid",
+                                        "value": {
+                                            "code": 400,
+                                            "success": false,
+                                            "message": "Payload type invalid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/event/hr/33ad1abf05": {
+            "put": {
+                "tags": [
+                    "event > HR"
+                ],
+                "summary": "update event",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "event_name": "survey2",
+                                    "proposed_dates": [
+                                        "02-12-2024",
+                                        "03-12-2024",
+                                        "04-12-2024"
+                                    ],
+                                    "location": "jakarta"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 09:08:33 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 312
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "Event created Successfully",
+                                    "data": {
+                                        "id": "30f1d3aa27",
+                                        "event_name": "survey2",
+                                        "proposed_dates": [
+                                            "02-12-2024",
+                                            "03-12-2024",
+                                            "04-12-2024"
+                                        ],
+                                        "location": "jakarta",
+                                        "user_id": "b730agdee3",
+                                        "created_at": "2024-12-12T13:31:10Z",
+                                        "updated_at": "2024-12-12T16:08:33Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 09:28:47 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 56
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 404,
+                                    "success": false,
+                                    "message": "Event not found"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/event/37e25b2d2f": {
+            "delete": {
+                "tags": [
+                    "event > HR"
+                ],
+                "summary": "delete event",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 09:32:41 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 66
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "Event deleted Successfully"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 09:28:35 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 56
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 404,
+                                    "success": false,
+                                    "message": "Event not found"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/event/vendor": {
+            "get": {
+                "tags": [
+                    "event > Vendor"
+                ],
+                "summary": "get all events",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 10:01:20 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 608
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "Events retrieved Successfully",
+                                    "data": [
+                                        {
+                                            "id": "33ad1abf05",
+                                            "event_name": "survey",
+                                            "proposed_dates": [
+                                                "01-12-2024",
+                                                "02-12-2024",
+                                                "03-12-2024"
+                                            ],
+                                            "location": "bandung",
+                                            "user_id": "b730agdee3",
+                                            "user_name": "hr company 1",
+                                            "created_at": "2024-12-12T13:34:13Z",
+                                            "updated_at": "2024-12-12T13:34:13Z"
+                                        },
+                                        {
+                                            "id": "age3d4f03d",
+                                            "event_name": "survey",
+                                            "proposed_dates": [
+                                                "01-12-2024",
+                                                "02-12-2024",
+                                                "03-12-2024"
+                                            ],
+                                            "location": "bandung",
+                                            "user_id": "b730agdee3",
+                                            "user_name": "hr company 1",
+                                            "created_at": "2024-12-12T13:55:01Z",
+                                            "updated_at": "2024-12-12T13:55:01Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/event/vendor/fcgffc9a48": {
+            "patch": {
+                "tags": [
+                    "event > Vendor"
+                ],
+                "summary": "confirm date",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "confirmed_date": "06-12-2024"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 14:05:15 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 387
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "Date confirmed Successfully",
+                                    "data": {
+                                        "id": "33ad1abf05",
+                                        "event_name": "survey2",
+                                        "proposed_dates": [
+                                            "01-12-2024",
+                                            "02-12-2024",
+                                            "03-12-2024",
+                                            "02-12-2024",
+                                            "03-12-2024",
+                                            "04-12-2024"
+                                        ],
+                                        "location": "jakarta",
+                                        "user_id": "b730agdee3",
+                                        "confirmed_date": "2024-12-10T00:00:00Z",
+                                        "created_at": "2024-12-12T13:34:13Z",
+                                        "updated_at": "2024-12-12T21:05:15Z"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/event/vendor/reject/fcgffc9a48": {
+            "patch": {
+                "tags": [
+                    "event > Vendor"
+                ],
+                "summary": "reject dates",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "remark": "we have schedule at those dates"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Fri, 13 Dec 2024 04:37:40 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 375
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "Dates rejected Successfully",
+                                    "data": {
+                                        "id": "9cb8f7gc5f",
+                                        "event_name": "survey",
+                                        "proposed_dates": [
+                                            "01-12-2024",
+                                            "02-12-2024",
+                                            "03-12-2024"
+                                        ],
+                                        "location": "bandung",
+                                        "status": "rejected",
+                                        "user_id": "b730agdee3",
+                                        "remark": "we have schedule at those dates",
+                                        "created_at": "2024-12-13T02:24:29Z",
+                                        "updated_at": "2024-12-13T11:37:39Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Fri, 13 Dec 2024 04:37:53 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 88
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 400,
+                                    "success": false,
+                                    "message": "Event's date accepted already, cannot be reject"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/": {
+            "get": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "root",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Thu, 12 Dec 2024 17:53:36 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 65
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "welcome to RPB Api",
+                                    "success": true,
+                                    "version": "1.1.0"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {},
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

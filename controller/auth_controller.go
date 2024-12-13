@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type authController struct {
@@ -25,7 +26,17 @@ func (a *authController) Register(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		errorhandler.HandleError(c, &errorhandler.BadRequestError{
-			Message: err.Error(),
+			Message: "Payload type invalid",
+		})
+		return
+	}
+
+	validate := validator.New()
+	err := validate.Struct(user)
+	if err != nil {
+		errorMsg := helper.GetErrorMessage(err)
+		errorhandler.HandleError(c, &errorhandler.BadRequestError{
+			Message: errorMsg,
 		})
 		return
 	}
@@ -48,7 +59,17 @@ func (a authController) Login(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		errorhandler.HandleError(c, &errorhandler.BadRequestError{
-			Message: err.Error(),
+			Message: "Payload type invalid",
+		})
+		return
+	}
+
+	validate := validator.New()
+	err := validate.Struct(user)
+	if err != nil {
+		errorMsg := helper.GetErrorMessage(err)
+		errorhandler.HandleError(c, &errorhandler.BadRequestError{
+			Message: errorMsg,
 		})
 		return
 	}
@@ -60,10 +81,10 @@ func (a authController) Login(c *gin.Context) {
 	}
 
 	res := helper.Response(dto.ResponseParams{
-		StatusCode: http.StatusAccepted,
+		StatusCode: http.StatusOK,
 		Message:    "User logged in successfully",
 		Token:      &token,
 	})
 
-	c.JSON(http.StatusAccepted, res)
+	c.JSON(http.StatusOK, res)
 }
