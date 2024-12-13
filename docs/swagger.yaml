@@ -3,7 +3,7 @@ info:
   title: booking-event
   version: 1.0.0
 servers:
-  - url: http://locahost:5000
+  - url: http://localhost:5000
 components:
   securitySchemes:
     bearerAuth:
@@ -778,4 +778,4 @@ paths:
               example:
                 message: welcome to RPB Api
                 success: true
-                version: 1.1.0
+                version: 1.0.0
