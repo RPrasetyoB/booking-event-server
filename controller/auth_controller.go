@@ -88,3 +88,28 @@ func (a authController) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, res)
 }
+
+func (a authController) UserDetail(c *gin.Context) {
+	userData, exists := c.Get("user")
+	if !exists {
+		errorhandler.HandleError(c, &errorhandler.UnauthorizedError{
+			Message: "User not found",
+		})
+		return
+	}
+
+	userID, _ := userData.(map[string]interface{})["user_id"].(string)
+	userData, err := a.service.UserProfile(userID)
+	if err != nil {
+		errorhandler.HandleError(c, err)
+		return
+	}
+
+	res := helper.Response(dto.ResponseParams{
+		StatusCode: http.StatusOK,
+		Message:    "User Data retrieved successfully",
+		Data:       userData,
+	})
+
+	c.JSON(http.StatusOK, res)
+}
