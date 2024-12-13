@@ -11,7 +11,7 @@ type EventRepository interface {
 	CreateEvent(event *entity.Event) (*entity.Event, error)
 	GetEventByUserID(userID string) ([]*entity.Event, error)
 	GetEventByID(eventID string) (*entity.Event, error)
-	GetAllEvent() ([]*entity.Event, error)
+	GetAllEventVendor(name string) ([]*entity.Event, error)
 	GetEventByStatus(status string) ([]*entity.Event, error)
 	PutEventByID(eventID string, event entity.Event) (*entity.Event, error)
 	DeleteEventByID(eventID string) error
@@ -57,9 +57,9 @@ func (r eventRepository) GetEventByID(eventID string) (*entity.Event, error) {
 	return &event, nil
 }
 
-func (r eventRepository) GetAllEvent() ([]*entity.Event, error) {
+func (r eventRepository) GetAllEventVendor(name string) ([]*entity.Event, error) {
 	var events []*entity.Event
-	err := r.db.Find(&events).Error
+	err := r.db.Where("vendor_name = ?", name).Find(&events).Error
 	if err != nil {
 		return nil, err
 	}

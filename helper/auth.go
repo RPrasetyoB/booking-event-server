@@ -23,11 +23,11 @@ func ComparePassword(password string, hashedPass string) bool {
 func GenerateToken(user entity.User) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id": user.ID,
+		"name":    user.Name,
 		"role_id": user.Role_id,
 		"exp":     time.Now().Add(time.Hour * 1).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
 	jwtSecret := os.Getenv("JWT_SECRET")
 	tokenString, err := token.SignedString([]byte(jwtSecret))
 	if err != nil {

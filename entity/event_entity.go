@@ -5,6 +5,7 @@ import "time"
 type Event struct {
 	ID             string `gorm:"column:id"`
 	Event_name     string
+	Vendor_name    string
 	Location       string
 	User_id        string
 	Status         string `gorm:"default:'pending'"`

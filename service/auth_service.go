@@ -14,6 +14,7 @@ type AuthService interface {
 	Register(req *dto.RegisterRequest) error
 	Login(req *dto.LoginRequest) (string, error)
 	UserProfile(userID string) (*dto.UserResponse, error)
+	GetAllVendors() ([]*dto.UserResponse, error)
 }
 
 type authService struct {
@@ -98,4 +99,25 @@ func (s *authService) UserProfile(userID string) (*dto.UserResponse, error) {
 	}
 
 	return response, nil
+}
+
+func (s *authService) GetAllVendors() ([]*dto.UserResponse, error) {
+	users, err := s.repository.GetAllVendors()
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, &errorhandler.BadRequestError{Message: "users not found"}
+		}
+		return nil, &errorhandler.InternalServerError{Message: err.Error()}
+	}
+
+	var responses []*dto.UserResponse
+	for _, user := range users {
+		responses = append(responses, &dto.UserResponse{
+			ID:      user.ID,
+			Name:    user.Name,
+			Role_id: user.Role_id,
+		})
+	}
+
+	return responses, nil
 }

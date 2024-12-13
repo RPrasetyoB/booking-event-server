@@ -55,6 +55,15 @@ func GetToken(c *gin.Context) (map[string]interface{}, error) {
 		userID = fmt.Sprintf("%d", int64(userIDFloat))
 	}
 
+	user_name, ok := claims["name"].(string)
+	if !ok {
+		userIDFloat, ok := claims["name"].(float64)
+		if !ok {
+			return nil, errors.New("invalid name in token")
+		}
+		userID = fmt.Sprintf("%d", int64(userIDFloat))
+	}
+
 	roleIDFloat, ok := claims["role_id"].(float64)
 	if !ok {
 		return nil, errors.New("invalid role_id in token")
@@ -64,6 +73,7 @@ func GetToken(c *gin.Context) (map[string]interface{}, error) {
 	result := map[string]interface{}{
 		"user_id": userID,
 		"role_id": roleID,
+		"name":    user_name,
 	}
 	return result, nil
 }

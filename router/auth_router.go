@@ -19,4 +19,5 @@ func AuthRouter(api *gin.RouterGroup) {
 	auth.POST("/register", authController.Register)
 	auth.POST("/login", authController.Login)
 	api.GET("/user", middleware.Authentication, authController.UserDetail)
+	api.GET("/vendors", middleware.Authentication, authController.AllVendors)
 }
