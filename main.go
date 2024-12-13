@@ -3,6 +3,7 @@ package main
 import (
 	"booking-event-server/config"
 	"booking-event-server/docs"
+	"booking-event-server/middleware"
 	"booking-event-server/router"
 	"fmt"
 	"os"
@@ -31,6 +32,8 @@ func main() {
 	config.LoadDB()
 
 	r := gin.New()
+	r.Use(middleware.CorsSetting())
+
 	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -44,7 +47,7 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url))
 
 	api := r.Group("/api")
-	r.SetTrustedProxies([]string{"127.0.0.1"})
+	// r.SetTrustedProxies([]string{"127.0.0.1"})
 
 	router.AuthRouter(api)
 	router.EventRouter(api)
