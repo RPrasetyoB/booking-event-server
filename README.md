@@ -15,7 +15,7 @@ This API provides endpoints for managing a Booking event application. It allows 
 ### Documentation
 
 - [postman](https://documenter.getpostman.com/view/36914326/2sAYHxnPdy)
-- [swagger](http://localhost:5000/swagger/index.htm) (Server must running locally)
+- [swagger](http://localhost:5000/swagger/index.html) (Server must running locally)
 
 ## Prerequisites
 
