@@ -195,29 +195,15 @@ func (s *eventService) UpdateEventHR(req *dto.CreaEventRequest, userID string, e
 		Confirmed_date: confirmedDate,
 	}
 
-	getDates, err := s.repoDates.GetDatesByEventID(eventID)
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+	err2 := s.repoDates.DeleteDatesByEventID(eventID)
+	if err2 != nil {
+		if err2 == gorm.ErrRecordNotFound {
 			return nil, &errorhandler.NotFoundError{
-				Message: "Event not found",
+				Message: "Proposed date not found",
 			}
 		}
 		return nil, &errorhandler.InternalServerError{
-			Message: err.Error(),
-		}
-	}
-
-	for _, date := range getDates {
-		err := s.repoDates.DeleteDatesByEventID(date.ID)
-		if err != nil {
-			if err == gorm.ErrRecordNotFound {
-				return nil, &errorhandler.NotFoundError{
-					Message: "Proposed date not found",
-				}
-			}
-			return nil, &errorhandler.InternalServerError{
-				Message: err.Error(),
-			}
+			Message: err2.Error(),
 		}
 	}
 

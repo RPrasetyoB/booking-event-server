@@ -47,7 +47,6 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url))
 
 	api := r.Group("/api")
-	// r.SetTrustedProxies([]string{"127.0.0.1"})
 
 	router.AuthRouter(api)
 	router.EventRouter(api)
