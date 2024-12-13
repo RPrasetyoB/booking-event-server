@@ -26,7 +26,7 @@ Before using the API server, ensure that you have:
 
 ### Database design
 
-![](assets/img/README/2024-12-13-14-44-38-image.png)
+![](assets/img/README/2024-12-13-17-04-45-image.png)
 
 ### Authentication
 
@@ -108,6 +108,7 @@ var VendorAuth = authorization([]int64{2})
 | User registration             | POST   | *baseUrl*/api/v1/auth/register             | no                  | name: string,<br>role: string,<br/>password: string                |
 | User login                    | POST   | *baseUrl*i/v1/auth/login                   | no                  | name: string, password: string                                     |
 | User detail                   | GET    | *baseUrl*/v1/user                          | yes                 | -                                                                  |
+| get all vendors               | GET    | *baseUrl*/v1/vendors                       | yes                 |                                                                    |
 | Create booking event          | POST   | *baseUrl*/api/event/hr                     | yes                 | event_name: string, proposed_dates: []string,<br/>location: string |
 | Get booking events by User_ID | GET    | *baseUrl*/api/event/hr                     | yes                 | -                                                                  |
 | Update todo                   | PUT    | *baseUrl*/v1/api/event/hr/:event_id        | yes                 | event_name: string, proposed_dates: []string,<br/>location: string |
@@ -136,8 +137,6 @@ var VendorAuth = authorization([]int64{2})
     "password": "abc123",
 }
 ```
-
-
 
 ## Tutorial: Using the API locally
 

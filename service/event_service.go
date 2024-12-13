@@ -17,7 +17,7 @@ type EventService interface {
 	GetEventByID(eventID string) (*dto.GetEventResponse, error)
 	UpdateEventHR(req *dto.CreaEventRequest, userID string, eventID string) (*dto.EventResponse, error)
 	DeleteEvent(eventID string) error
-	GetAllEvents() ([]*dto.GetEventResponse, error)
+	GetAllEventsVendor(user_name string) ([]*dto.GetEventResponse, error)
 	AcceptEventVendor(req *dto.ConfirmDateRequest, eventID string) (*dto.EventResponse, error)
 	RejectEventVendor(req *dto.RejectRequest, eventID string) (*dto.EventResponse, error)
 }
@@ -46,6 +46,7 @@ func (s *eventService) CreateEvent(req *dto.CreaEventRequest, userID string) (*d
 	event := entity.Event{
 		ID:             nanoid,
 		Event_name:     req.Event_name,
+		Vendor_name:    req.Vendor_name,
 		Location:       req.Location,
 		User_id:        userID,
 		Confirmed_date: confirmedDate,
@@ -83,6 +84,7 @@ func (s *eventService) CreateEvent(req *dto.CreaEventRequest, userID string) (*d
 		ID:             createdEvent.ID,
 		Event_name:     createdEvent.Event_name,
 		Proposed_dates: req.Proposed_dates,
+		Vendor_name:    req.Vendor_name,
 		Location:       createdEvent.Location,
 		User_id:        createdEvent.User_id,
 		Status:         createdEvent.Status,
@@ -126,6 +128,7 @@ func (s *eventService) GetAllEventsHRByUserID(userID string) ([]*dto.GetEventRes
 			ID:             event.ID,
 			Event_name:     event.Event_name,
 			Proposed_dates: dateStrings,
+			Vendor_name:    event.Vendor_name,
 			Location:       event.Location,
 			Status:         event.Status,
 			User_id:        event.User_id,
@@ -170,6 +173,7 @@ func (s *eventService) GetEventByID(eventID string) (*dto.GetEventResponse, erro
 		ID:             event.ID,
 		Event_name:     event.Event_name,
 		Proposed_dates: dateStrings,
+		Vendor_name:    event.Vendor_name,
 		Location:       event.Location,
 		Status:         event.Status,
 		User_id:        event.User_id,
@@ -254,6 +258,7 @@ func (s *eventService) UpdateEventHR(req *dto.CreaEventRequest, userID string, e
 		ID:             updatedEvent.ID,
 		Event_name:     updatedEvent.Event_name,
 		Proposed_dates: req.Proposed_dates,
+		Vendor_name:    updatedEvent.Vendor_name,
 		Location:       updatedEvent.Location,
 		Status:         updatedEvent.Status,
 		User_id:        updatedEvent.User_id,
@@ -293,8 +298,8 @@ func (s *eventService) DeleteEvent(eventID string) error {
 	return nil
 }
 
-func (s *eventService) GetAllEvents() ([]*dto.GetEventResponse, error) {
-	events, err := s.repoEvent.GetAllEvent()
+func (s *eventService) GetAllEventsVendor(user_name string) ([]*dto.GetEventResponse, error) {
+	events, err := s.repoEvent.GetAllEventVendor(user_name)
 	if err != nil {
 		return nil, &errorhandler.InternalServerError{
 			Message: err.Error(),
@@ -326,6 +331,7 @@ func (s *eventService) GetAllEvents() ([]*dto.GetEventResponse, error) {
 			ID:             event.ID,
 			Event_name:     event.Event_name,
 			Proposed_dates: dateStrings,
+			Vendor_name:    event.Vendor_name,
 			Location:       event.Location,
 			Status:         event.Status,
 			User_id:        event.User_id,
@@ -400,6 +406,7 @@ func (s *eventService) AcceptEventVendor(req *dto.ConfirmDateRequest, eventID st
 		ID:             updatedEvent.ID,
 		Event_name:     updatedEvent.Event_name,
 		Proposed_dates: dateStrings,
+		Vendor_name:    updatedEvent.Vendor_name,
 		Location:       updatedEvent.Location,
 		Status:         updatedEvent.Status,
 		User_id:        updatedEvent.User_id,
@@ -471,6 +478,7 @@ func (s *eventService) RejectEventVendor(req *dto.RejectRequest, eventID string)
 		ID:             updatedEvent.ID,
 		Event_name:     updatedEvent.Event_name,
 		Proposed_dates: dateStrings,
+		Vendor_name:    updatedEvent.Vendor_name,
 		Location:       updatedEvent.Location,
 		Status:         updatedEvent.Status,
 		Remark:         updatedEvent.Remark,

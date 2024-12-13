@@ -12,12 +12,14 @@ import (
 )
 
 type eventController struct {
-	service service.EventService
+	serviceEvent service.EventService
+	serviceAuth  service.AuthService
 }
 
-func NewEventController(s service.EventService) *eventController {
+func NewEventController(eventService service.EventService, authService service.AuthService) *eventController {
 	return &eventController{
-		service: s,
+		serviceEvent: eventService,
+		serviceAuth:  authService,
 	}
 }
 
@@ -57,7 +59,7 @@ func (e *eventController) CreateEvent(c *gin.Context) {
 		return
 	}
 
-	newEvent, err := e.service.CreateEvent(&event, userID)
+	newEvent, err := e.serviceEvent.CreateEvent(&event, userID)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return
@@ -81,7 +83,7 @@ func (e *eventController) GetEventsHRbyUserID(c *gin.Context) {
 	}
 
 	userID, _ := userData.(map[string]interface{})["user_id"].(string)
-	events, err := e.service.GetAllEventsHRByUserID(userID)
+	events, err := e.serviceEvent.GetAllEventsHRByUserID(userID)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return
@@ -109,7 +111,7 @@ func (e *eventController) GetEventsHRbyUserID(c *gin.Context) {
 
 func (e *eventController) GetEventbyID(c *gin.Context) {
 	eventID := c.Param("id")
-	event, err := e.service.GetEventByID(eventID)
+	event, err := e.serviceEvent.GetEventByID(eventID)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return
@@ -155,7 +157,7 @@ func (e *eventController) UpdateEventHR(c *gin.Context) {
 
 	userID, _ := userData.(map[string]interface{})["user_id"].(string)
 
-	updatedEvent, err := e.service.UpdateEventHR(&event, userID, eventID)
+	updatedEvent, err := e.serviceEvent.UpdateEventHR(&event, userID, eventID)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return
@@ -171,7 +173,7 @@ func (e *eventController) UpdateEventHR(c *gin.Context) {
 
 func (e *eventController) DeleteEventByID(c *gin.Context) {
 	eventID := c.Param("id")
-	err := e.service.DeleteEvent(eventID)
+	err := e.serviceEvent.DeleteEvent(eventID)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return
@@ -184,8 +186,16 @@ func (e *eventController) DeleteEventByID(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-func (e *eventController) GetAllEventsVendor(c *gin.Context) {
-	result, err := e.service.GetAllEvents()
+func (e *eventController) GetEventsVendor(c *gin.Context) {
+	userData, exists := c.Get("user")
+	if !exists {
+		errorhandler.HandleError(c, &errorhandler.UnauthorizedError{
+			Message: "User not found",
+		})
+		return
+	}
+	user_name, _ := userData.(map[string]interface{})["name"].(string)
+	result, err := e.serviceEvent.GetAllEventsVendor(user_name)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return
@@ -218,7 +228,7 @@ func (e *eventController) ConfirmDate(c *gin.Context) {
 		})
 		return
 	}
-	updatedEvent, err := e.service.AcceptEventVendor(&confirmeDate, eventID)
+	updatedEvent, err := e.serviceEvent.AcceptEventVendor(&confirmeDate, eventID)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return
@@ -251,7 +261,7 @@ func (e *eventController) RejectDates(c *gin.Context) {
 		})
 		return
 	}
-	updatedEvent, err := e.service.RejectEventVendor(rejectDate, eventID)
+	updatedEvent, err := e.serviceEvent.RejectEventVendor(rejectDate, eventID)
 	if err != nil {
 		errorhandler.HandleError(c, err)
 		return

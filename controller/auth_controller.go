@@ -113,3 +113,19 @@ func (a authController) UserDetail(c *gin.Context) {
 
 	c.JSON(http.StatusOK, res)
 }
+
+func (a authController) AllVendors(c *gin.Context) {
+	userData, err := a.service.GetAllVendors()
+	if err != nil {
+		errorhandler.HandleError(c, err)
+		return
+	}
+
+	res := helper.Response(dto.ResponseParams{
+		StatusCode: http.StatusOK,
+		Message:    "Vendors retrieved successfully",
+		Data:       userData,
+	})
+
+	c.JSON(http.StatusOK, res)
+}

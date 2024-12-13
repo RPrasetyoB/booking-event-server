@@ -11,6 +11,7 @@ components:
       scheme: bearer
 tags:
   - name: auth
+  - name: user
   - name: event
   - name: event > HR
   - name: event > Vendor
@@ -156,7 +157,7 @@ paths:
   /api/user:
     get:
       tags:
-        - auth
+        - user
       summary: user profile
       security:
         - bearerAuth: []
@@ -188,6 +189,47 @@ paths:
                   ID: de3563c43c
                   Name: vendor 1
                   Role_id: 2
+  /api/vendors:
+    get:
+      tags:
+        - user
+      summary: get All vendors
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Date:
+              schema:
+                type: string
+                example: Fri, 13 Dec 2024 09:58:25 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '229'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: 200
+                success: true
+                message: Vendors retrieved successfully
+                data:
+                  - ID: de3563c43c
+                    Name: vendor 1
+                    Role_id: 2
+                  - ID: cf199ccac4
+                    Name: vendor 2
+                    Role_id: 2
+                  - ID: ea7g5fec73
+                    Name: vendor 3
+                    Role_id: 2
   /api/event/hr:
     post:
       tags:
@@ -199,12 +241,13 @@ paths:
             schema:
               type: object
               example:
-                event_name: meeting
+                event_name: survey place
                 proposed_dates:
-                  - 04-12-2024
-                  - 05-12-2024
-                  - 06-12-2024
-                location: jakarta
+                  - 01-12-2024
+                  - 02-12-2024
+                  - 03-12-2024
+                vendor_name: vendor 3
+                location: bandung
       security:
         - bearerAuth: []
       responses:
@@ -292,11 +335,11 @@ paths:
             Date:
               schema:
                 type: string
-                example: Thu, 12 Dec 2024 08:39:35 GMT
+                example: Fri, 13 Dec 2024 09:11:41 GMT
             Content-Length:
               schema:
                 type: integer
-                example: '1030'
+                example: '703'
           content:
             application/json:
               schema:
@@ -306,51 +349,35 @@ paths:
                 success: true
                 message: Events retrieved successfully
                 data:
-                  - id: 30f1d3aa27
-                    event_name: survey
+                  - id: 724d536b60
+                    event_name: meeting
+                    proposed_dates:
+                      - 04-12-2024
+                      - 05-12-2024
+                      - 06-12-2024
+                    vendor_name: vendor 1
+                    location: jakarta
+                    status: pending
+                    user_id: b730agdee3
+                    user_name: hr company 1
+                    confirmed_date: null
+                    created_at: '2024-12-13T16:11:06Z'
+                    updated_at: '2024-12-13T16:11:06Z'
+                  - id: 3777a094f1
+                    event_name: survey place
                     proposed_dates:
                       - 01-12-2024
                       - 02-12-2024
                       - 03-12-2024
+                    vendor_name: vendor 1
                     location: bandung
+                    status: pending
                     user_id: b730agdee3
+                    user_name: hr company 1
                     confirmed_date: null
-                    created_at: '2024-12-12T13:31:10Z'
-                    updated_at: '2024-12-12T13:31:10Z'
-                  - id: 37e25b2d2f
-                    event_name: survey
-                    proposed_dates:
-                      - 01-12-2024
-                      - 02-12-2024
-                      - 03-12-2024
-                    location: bandung
-                    user_id: b730agdee3
-                    confirmed_date: null
-                    created_at: '2024-12-12T13:32:19Z'
-                    updated_at: '2024-12-12T13:32:19Z'
-                  - id: 33ad1abf05
-                    event_name: survey
-                    proposed_dates:
-                      - 01-12-2024
-                      - 02-12-2024
-                      - 03-12-2024
-                    location: bandung
-                    user_id: b730agdee3
-                    confirmed_date: null
-                    created_at: '2024-12-12T13:34:13Z'
-                    updated_at: '2024-12-12T13:34:13Z'
-                  - id: age3d4f03d
-                    event_name: survey
-                    proposed_dates:
-                      - 01-12-2024
-                      - 02-12-2024
-                      - 03-12-2024
-                    location: bandung
-                    user_id: b730agdee3
-                    confirmed_date: null
-                    created_at: '2024-12-12T13:55:01Z'
-                    updated_at: '2024-12-12T13:55:01Z'
-  /api/event/hr/33ad1abf05:
+                    created_at: '2024-12-13T16:11:32Z'
+                    updated_at: '2024-12-13T16:11:32Z'
+  /api/event/hr/3777a094f1:
     put:
       tags:
         - event > HR
@@ -367,6 +394,7 @@ paths:
                   - 03-12-2024
                   - 04-12-2024
                 location: jakarta
+                vendor_name: vendor 1
       security:
         - bearerAuth: []
       responses:
@@ -380,11 +408,11 @@ paths:
             Date:
               schema:
                 type: string
-                example: Thu, 12 Dec 2024 09:08:33 GMT
+                example: Fri, 13 Dec 2024 09:12:30 GMT
             Content-Length:
               schema:
                 type: integer
-                example: '312'
+                example: '370'
           content:
             application/json:
               schema:
@@ -392,19 +420,22 @@ paths:
               example:
                 code: 200
                 success: true
-                message: Event created Successfully
+                message: Event updated Successfully
                 data:
-                  id: 30f1d3aa27
+                  id: 3777a094f1
                   event_name: survey2
                   proposed_dates:
                     - 02-12-2024
                     - 03-12-2024
                     - 04-12-2024
+                  vendor_name: vendor 1
                   location: jakarta
+                  status: pending
                   user_id: b730agdee3
+                  remark: null
                   confirmed_date: null
-                  created_at: '2024-12-12T13:31:10Z'
-                  updated_at: '2024-12-12T16:08:33Z'
+                  created_at: '2024-12-13T16:11:32Z'
+                  updated_at: '2024-12-13T16:12:30Z'
         '404':
           description: Not Found
           headers:
@@ -428,7 +459,7 @@ paths:
                 code: 404
                 success: false
                 message: Event not found
-  /api/event/37e25b2d2f:
+  /api/event/fb6g1b8354:
     delete:
       tags:
         - event > HR
@@ -500,11 +531,11 @@ paths:
             Date:
               schema:
                 type: string
-                example: Thu, 12 Dec 2024 10:01:20 GMT
+                example: Fri, 13 Dec 2024 09:45:01 GMT
             Content-Length:
               schema:
                 type: integer
-                example: '608'
+                example: '737'
           content:
             application/json:
               schema:
@@ -514,30 +545,37 @@ paths:
                 success: true
                 message: Events retrieved Successfully
                 data:
-                  - id: 33ad1abf05
-                    event_name: survey
+                  - id: 724d536b60
+                    event_name: meeting
+                    proposed_dates:
+                      - 04-12-2024
+                      - 05-12-2024
+                      - 06-12-2024
+                    vendor_name: vendor 1
+                    location: jakarta
+                    status: pending
+                    user_id: b730agdee3
+                    user_name: hr company 1
+                    confirmed_date: null
+                    created_at: '2024-12-13T16:11:06Z'
+                    updated_at: '2024-12-13T16:11:06Z'
+                  - id: 3777a094f1
+                    event_name: survey2
                     proposed_dates:
                       - 01-12-2024
                       - 02-12-2024
                       - 03-12-2024
-                    location: bandung
-                    user_id: b730agdee3
-                    user_name: hr company 1
-                    confirmed_date: null
-                    created_at: '2024-12-12T13:34:13Z'
-                    updated_at: '2024-12-12T13:34:13Z'
-                  - id: age3d4f03d
-                    event_name: survey
-                    proposed_dates:
-                      - 01-12-2024
                       - 02-12-2024
                       - 03-12-2024
-                    location: bandung
+                      - 04-12-2024
+                    vendor_name: vendor 1
+                    location: jakarta
+                    status: pending
                     user_id: b730agdee3
                     user_name: hr company 1
                     confirmed_date: null
-                    created_at: '2024-12-12T13:55:01Z'
-                    updated_at: '2024-12-12T13:55:01Z'
+                    created_at: '2024-12-13T16:11:32Z'
+                    updated_at: '2024-12-13T16:12:30Z'
   /api/event/vendor/fcgffc9a48:
     patch:
       tags:
@@ -740,4 +778,4 @@ paths:
               example:
                 message: welcome to RPB Api
                 success: true
-                version: 1.1.0
+                version: 1.0.0
