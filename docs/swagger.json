@@ -163,7 +163,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "name": "hr company 1",
+                                    "name": "vendor 1",
                                     "password": "abc123"
                                 }
                             }
@@ -255,6 +255,67 @@
                         }
                     }
                 }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "user profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "Content-Type": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "application/json; charset=utf-8"
+                                }
+                            },
+                            "Date": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Fri, 13 Dec 2024 07:08:46 GMT"
+                                }
+                            },
+                            "Content-Length": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 129
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "code": 200,
+                                    "success": true,
+                                    "message": "User Data retrieved successfully",
+                                    "data": {
+                                        "ID": "de3563c43c",
+                                        "Name": "vendor 1",
+                                        "Role_id": 2
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/event/hr": {

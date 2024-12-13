@@ -13,6 +13,7 @@ import (
 type AuthService interface {
 	Register(req *dto.RegisterRequest) error
 	Login(req *dto.LoginRequest) (string, error)
+	UserProfile(userID string) (*dto.UserResponse, error)
 }
 
 type authService struct {
@@ -79,4 +80,22 @@ func (s *authService) Login(req *dto.LoginRequest) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (s *authService) UserProfile(userID string) (*dto.UserResponse, error) {
+	user, err := s.repository.FindUserById(userID)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, &errorhandler.BadRequestError{Message: "user not found"}
+		}
+		return nil, &errorhandler.InternalServerError{Message: err.Error()}
+	}
+
+	response := &dto.UserResponse{
+		ID:      user.ID,
+		Name:    user.Name,
+		Role_id: user.Role_id,
+	}
+
+	return response, nil
 }

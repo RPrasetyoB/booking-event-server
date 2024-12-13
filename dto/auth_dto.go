@@ -10,3 +10,9 @@ type LoginRequest struct {
 	Name     string `validate:"required" json:"name"`
 	Password string `validate:"required" json:"password"`
 }
+
+type UserResponse struct {
+	ID      string `gorm:"column:id"`
+	Name    string `gorm:"column:name"`
+	Role_id int    `gorm:"column:role_id"`
+}
