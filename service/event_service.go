@@ -14,6 +14,7 @@ import (
 type EventService interface {
 	CreateEvent(req *dto.CreaEventRequest, userId string) (*dto.EventResponse, error)
 	GetAllEventsHRByUserID(userID string) ([]*dto.GetEventResponse, error)
+	GetEventByID(eventID string) (*dto.GetEventResponse, error)
 	UpdateEventHR(req *dto.CreaEventRequest, userID string, eventID string) (*dto.EventResponse, error)
 	DeleteEvent(eventID string) error
 	GetAllEvents() ([]*dto.GetEventResponse, error)
@@ -137,6 +138,48 @@ func (s *eventService) GetAllEventsHRByUserID(userID string) ([]*dto.GetEventRes
 	}
 
 	return response, nil
+}
+
+func (s *eventService) GetEventByID(eventID string) (*dto.GetEventResponse, error) {
+	event, err := s.repoEvent.GetEventByID(eventID)
+	if err != nil {
+		return nil, &errorhandler.InternalServerError{
+			Message: err.Error(),
+		}
+	}
+	user, err := s.repoUser.FindUserById(event.User_id)
+	if err != nil {
+		return nil, &errorhandler.InternalServerError{
+			Message: err.Error(),
+		}
+	}
+
+	dates, err := s.repoDates.GetDatesByEventID(event.ID)
+	if err != nil {
+		return nil, &errorhandler.InternalServerError{
+			Message: err.Error(),
+		}
+	}
+
+	var dateStrings []string
+	for _, date := range dates {
+		dateStrings = append(dateStrings, date.Date.Format("02-01-2006"))
+	}
+
+	eventResponse := &dto.GetEventResponse{
+		ID:             event.ID,
+		Event_name:     event.Event_name,
+		Proposed_dates: dateStrings,
+		Location:       event.Location,
+		Status:         event.Status,
+		User_id:        event.User_id,
+		User_name:      &user.Name,
+		Confirmed_date: event.Confirmed_date,
+		Created_at:     event.Created_at,
+		Updated_at:     event.Updated_at,
+	}
+
+	return eventResponse, nil
 }
 
 func (s *eventService) UpdateEventHR(req *dto.CreaEventRequest, userID string, eventID string) (*dto.EventResponse, error) {
