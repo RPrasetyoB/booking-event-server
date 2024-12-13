@@ -3,17 +3,12 @@ info:
   title: booking-event
   version: 1.0.0
 servers:
-  - url: http://{{base_url}}
+  - url: http://locahost:5000
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
-    inheritAuth:
-      type: http
-      scheme: inherit
-security:
-  - inheritAuth: []
 tags:
   - name: auth
   - name: user

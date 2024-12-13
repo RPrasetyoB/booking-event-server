@@ -6,12 +6,7 @@
     },
     "servers": [
         {
-            "url": "http://{{base_url}}"
-        }
-    ],
-    "security": [
-        {
-            "inheritAuth": []
+            "url": "http://locahost:5000"
         }
     ],
     "tags": [
@@ -1289,10 +1284,6 @@
             "bearerAuth": {
                 "type": "http",
                 "scheme": "bearer"
-            },
-            "inheritAuth": {
-                "type": "http",
-                "scheme": "inherit"
             }
         }
     }
