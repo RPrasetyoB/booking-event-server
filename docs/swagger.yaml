@@ -165,18 +165,6 @@ paths:
         '200':
           description: OK
           headers:
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-                example: Content-Type, Authorization
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-                example: GET, POST, PUT, DELETE, PATCH, OPTIONS
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-                example: '*'
             Content-Type:
               schema:
                 type: string
@@ -184,11 +172,11 @@ paths:
             Date:
               schema:
                 type: string
-                example: Sat, 14 Dec 2024 18:50:18 GMT
+                example: Sat, 14 Dec 2024 22:39:16 GMT
             Content-Length:
               schema:
                 type: integer
-                example: '150'
+                example: '129'
           content:
             application/json:
               schema:
@@ -198,9 +186,9 @@ paths:
                 success: true
                 message: User Data retrieved successfully
                 data:
-                  column:id: de3563c43c
-                  column:name: vendor 1
-                  column:role_id: 2
+                  id: de3563c43c
+                  name: vendor 1
+                  role_id: 2
   /api/vendors:
     get:
       tags:
@@ -212,18 +200,6 @@ paths:
         '200':
           description: OK
           headers:
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-                example: Content-Type, Authorization
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-                example: GET, POST, PUT, DELETE, PATCH, OPTIONS
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-                example: '*'
             Content-Type:
               schema:
                 type: string
@@ -231,11 +207,11 @@ paths:
             Date:
               schema:
                 type: string
-                example: Sat, 14 Dec 2024 18:50:37 GMT
+                example: Sat, 14 Dec 2024 22:39:39 GMT
             Content-Length:
               schema:
                 type: integer
-                example: '363'
+                example: '279'
           content:
             application/json:
               schema:
@@ -245,18 +221,18 @@ paths:
                 success: true
                 message: Vendors retrieved successfully
                 data:
-                  - column:id: de3563c43c
-                    column:name: vendor 1
-                    column:role_id: 2
-                  - column:id: cf199ccac4
-                    column:name: vendor 2
-                    column:role_id: 2
-                  - column:id: ea7g5fec73
-                    column:name: vendor 3
-                    column:role_id: 2
-                  - column:id: 2b6b3g74ba
-                    column:name: vendor 5
-                    column:role_id: 2
+                  - id: de3563c43c
+                    name: vendor 1
+                    role_id: 2
+                  - id: cf199ccac4
+                    name: vendor 2
+                    role_id: 2
+                  - id: ea7g5fec73
+                    name: vendor 3
+                    role_id: 2
+                  - id: 2b6b3g74ba
+                    name: vendor 5
+                    role_id: 2
   /api/event/hr:
     post:
       tags:
