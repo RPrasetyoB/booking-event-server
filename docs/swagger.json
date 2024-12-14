@@ -39,7 +39,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "name": "vendor 1",
+                                    "name": "vendor 5",
                                     "role": "vendor",
                                     "password": "abc123"
                                 }
@@ -270,6 +270,30 @@
                     "200": {
                         "description": "OK",
                         "headers": {
+                            "Access-Control-Allow-Headers": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Content-Type, Authorization"
+                                }
+                            },
+                            "Access-Control-Allow-Methods": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+                                }
+                            },
+                            "Access-Control-Allow-Origin": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "*"
+                                }
+                            },
                             "Content-Type": {
                                 "style": "simple",
                                 "explode": false,
@@ -283,7 +307,7 @@
                                 "explode": false,
                                 "schema": {
                                     "type": "string",
-                                    "example": "Fri, 13 Dec 2024 07:08:46 GMT"
+                                    "example": "Sat, 14 Dec 2024 18:50:18 GMT"
                                 }
                             },
                             "Content-Length": {
@@ -291,7 +315,7 @@
                                 "explode": false,
                                 "schema": {
                                     "type": "integer",
-                                    "example": 129
+                                    "example": 150
                                 }
                             }
                         },
@@ -305,9 +329,9 @@
                                     "success": true,
                                     "message": "User Data retrieved successfully",
                                     "data": {
-                                        "ID": "de3563c43c",
-                                        "Name": "vendor 1",
-                                        "Role_id": 2
+                                        "column:id": "de3563c43c",
+                                        "column:name": "vendor 1",
+                                        "column:role_id": 2
                                     }
                                 }
                             }
@@ -331,6 +355,30 @@
                     "200": {
                         "description": "OK",
                         "headers": {
+                            "Access-Control-Allow-Headers": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Content-Type, Authorization"
+                                }
+                            },
+                            "Access-Control-Allow-Methods": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+                                }
+                            },
+                            "Access-Control-Allow-Origin": {
+                                "style": "simple",
+                                "explode": false,
+                                "schema": {
+                                    "type": "string",
+                                    "example": "*"
+                                }
+                            },
                             "Content-Type": {
                                 "style": "simple",
                                 "explode": false,
@@ -344,7 +392,7 @@
                                 "explode": false,
                                 "schema": {
                                     "type": "string",
-                                    "example": "Fri, 13 Dec 2024 09:58:25 GMT"
+                                    "example": "Sat, 14 Dec 2024 18:50:37 GMT"
                                 }
                             },
                             "Content-Length": {
@@ -352,7 +400,7 @@
                                 "explode": false,
                                 "schema": {
                                     "type": "integer",
-                                    "example": 229
+                                    "example": 363
                                 }
                             }
                         },
@@ -367,19 +415,24 @@
                                     "message": "Vendors retrieved successfully",
                                     "data": [
                                         {
-                                            "ID": "de3563c43c",
-                                            "Name": "vendor 1",
-                                            "Role_id": 2
+                                            "column:id": "de3563c43c",
+                                            "column:name": "vendor 1",
+                                            "column:role_id": 2
                                         },
                                         {
-                                            "ID": "cf199ccac4",
-                                            "Name": "vendor 2",
-                                            "Role_id": 2
+                                            "column:id": "cf199ccac4",
+                                            "column:name": "vendor 2",
+                                            "column:role_id": 2
                                         },
                                         {
-                                            "ID": "ea7g5fec73",
-                                            "Name": "vendor 3",
-                                            "Role_id": 2
+                                            "column:id": "ea7g5fec73",
+                                            "column:name": "vendor 3",
+                                            "column:role_id": 2
+                                        },
+                                        {
+                                            "column:id": "2b6b3g74ba",
+                                            "column:name": "vendor 5",
+                                            "column:role_id": 2
                                         }
                                     ]
                                 }
@@ -494,7 +547,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "event_name": "survey place",
+                                    "event_name": "gathering",
                                     "proposed_dates": [
                                         "01-12-2024",
                                         "02-12-2024",
@@ -755,7 +808,7 @@
                 ]
             }
         },
-        "/api/event/fb6g1b8354": {
+        "/api/event/13250d10ea": {
             "delete": {
                 "tags": [
                     "event > HR"
@@ -945,7 +998,7 @@
                 ]
             }
         },
-        "/api/event/vendor/fcgffc9a48": {
+        "/api/event/vendor/724d536b60": {
             "patch": {
                 "tags": [
                     "event > Vendor"
@@ -957,7 +1010,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "confirmed_date": "06-12-2024"
+                                    "confirmed_date": "04-12-2024"
                                 }
                             }
                         }
@@ -1030,7 +1083,7 @@
                 ]
             }
         },
-        "/api/event/vendor/reject/fcgffc9a48": {
+        "/api/event/vendor/reject/3777a094f1": {
             "patch": {
                 "tags": [
                     "event > Vendor"
@@ -1154,7 +1207,7 @@
                 ]
             }
         },
-        "/api/event/fcgffc9a48": {
+        "/api/event/3777a094f1": {
             "get": {
                 "tags": [
                     "event"
@@ -1269,7 +1322,7 @@
                                 "example": {
                                     "message": "welcome to RPB Api",
                                     "success": true,
-                                    "version": "1.0.0"
+                                    "version": "1.1.0"
                                 }
                             }
                         }
