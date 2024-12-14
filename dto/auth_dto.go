@@ -12,7 +12,7 @@ type LoginRequest struct {
 }
 
 type UserResponse struct {
-	ID      string `gorm:"column:id"`
-	Name    string `gorm:"column:name"`
-	Role_id int    `gorm:"column:role_id"`
+	ID      string `json:"column:id"`
+	Name    string `json:"column:name"`
+	Role_id int    `json:"column:role_id"`
 }
