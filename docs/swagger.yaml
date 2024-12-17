@@ -165,18 +165,6 @@ paths:
         '200':
           description: OK
           headers:
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-                example: Content-Type, Authorization
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-                example: GET, POST, PUT, DELETE, PATCH, OPTIONS
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-                example: '*'
             Content-Type:
               schema:
                 type: string
@@ -184,11 +172,11 @@ paths:
             Date:
               schema:
                 type: string
-                example: Sat, 14 Dec 2024 18:50:18 GMT
+                example: Sat, 14 Dec 2024 22:39:16 GMT
             Content-Length:
               schema:
                 type: integer
-                example: '150'
+                example: '129'
           content:
             application/json:
               schema:
@@ -198,9 +186,9 @@ paths:
                 success: true
                 message: User Data retrieved successfully
                 data:
-                  column:id: de3563c43c
-                  column:name: vendor 1
-                  column:role_id: 2
+                  id: de3563c43c
+                  name: vendor 1
+                  role_id: 2
   /api/vendors:
     get:
       tags:
@@ -212,18 +200,6 @@ paths:
         '200':
           description: OK
           headers:
-            Access-Control-Allow-Headers:
-              schema:
-                type: string
-                example: Content-Type, Authorization
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-                example: GET, POST, PUT, DELETE, PATCH, OPTIONS
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-                example: '*'
             Content-Type:
               schema:
                 type: string
@@ -231,11 +207,11 @@ paths:
             Date:
               schema:
                 type: string
-                example: Sat, 14 Dec 2024 18:50:37 GMT
+                example: Sat, 14 Dec 2024 22:39:39 GMT
             Content-Length:
               schema:
                 type: integer
-                example: '363'
+                example: '279'
           content:
             application/json:
               schema:
@@ -245,18 +221,18 @@ paths:
                 success: true
                 message: Vendors retrieved successfully
                 data:
-                  - column:id: de3563c43c
-                    column:name: vendor 1
-                    column:role_id: 2
-                  - column:id: cf199ccac4
-                    column:name: vendor 2
-                    column:role_id: 2
-                  - column:id: ea7g5fec73
-                    column:name: vendor 3
-                    column:role_id: 2
-                  - column:id: 2b6b3g74ba
-                    column:name: vendor 5
-                    column:role_id: 2
+                  - id: de3563c43c
+                    name: vendor 1
+                    role_id: 2
+                  - id: cf199ccac4
+                    name: vendor 2
+                    role_id: 2
+                  - id: ea7g5fec73
+                    name: vendor 3
+                    role_id: 2
+                  - id: 2b6b3g74ba
+                    name: vendor 5
+                    role_id: 2
   /api/event/hr:
     post:
       tags:
@@ -435,11 +411,11 @@ paths:
             Date:
               schema:
                 type: string
-                example: Fri, 13 Dec 2024 09:12:30 GMT
+                example: Tue, 17 Dec 2024 14:28:49 GMT
             Content-Length:
               schema:
                 type: integer
-                example: '370'
+                example: '400'
           content:
             application/json:
               schema:
@@ -457,12 +433,12 @@ paths:
                     - 04-12-2024
                   vendor_name: vendor 1
                   location: jakarta
-                  status: pending
+                  status: rejected
                   user_id: b730agdee3
-                  remark: null
+                  remark: we have schedule at those dates
                   confirmed_date: null
                   created_at: '2024-12-13T16:11:32Z'
-                  updated_at: '2024-12-13T16:12:30Z'
+                  updated_at: '2024-12-17T21:28:49Z'
         '404':
           description: Not Found
           headers:
@@ -805,4 +781,4 @@ paths:
               example:
                 message: welcome to RPB Api
                 success: true
-                version: 1.1.0
+                version: 1.0.0

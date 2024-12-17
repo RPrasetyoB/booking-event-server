@@ -40,6 +40,7 @@ type GetEventResponse struct {
 	Status         string     `json:"status"`
 	User_id        string     `json:"user_id"`
 	User_name      *string    `json:"user_name"`
+	Remark         *string    `json:"remark"`
 	Confirmed_date *time.Time `json:"confirmed_date"`
 	Created_at     time.Time  `json:"created_at"`
 	Updated_at     time.Time  `json:"updated_at"`

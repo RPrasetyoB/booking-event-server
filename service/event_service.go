@@ -133,6 +133,7 @@ func (s *eventService) GetAllEventsHRByUserID(userID string) ([]*dto.GetEventRes
 			Status:         event.Status,
 			User_id:        event.User_id,
 			User_name:      &user.Name,
+			Remark:         event.Remark,
 			Confirmed_date: event.Confirmed_date,
 			Created_at:     event.Created_at,
 			Updated_at:     event.Updated_at,
@@ -178,6 +179,7 @@ func (s *eventService) GetEventByID(eventID string) (*dto.GetEventResponse, erro
 		Status:         event.Status,
 		User_id:        event.User_id,
 		User_name:      &user.Name,
+		Remark:         event.Remark,
 		Confirmed_date: event.Confirmed_date,
 		Created_at:     event.Created_at,
 		Updated_at:     event.Updated_at,
@@ -187,12 +189,11 @@ func (s *eventService) GetEventByID(eventID string) (*dto.GetEventResponse, erro
 }
 
 func (s *eventService) UpdateEventHR(req *dto.CreaEventRequest, userID string, eventID string) (*dto.EventResponse, error) {
-	confirmedDate := (*time.Time)(nil)
 	event := entity.Event{
-		Event_name:     req.Event_name,
-		Location:       req.Location,
-		User_id:        userID,
-		Confirmed_date: confirmedDate,
+		Event_name:  req.Event_name,
+		Location:    req.Location,
+		User_id:     userID,
+		Vendor_name: req.Vendor_name,
 	}
 
 	err2 := s.repoDates.DeleteDatesByEventID(eventID)
@@ -248,6 +249,7 @@ func (s *eventService) UpdateEventHR(req *dto.CreaEventRequest, userID string, e
 		Location:       updatedEvent.Location,
 		Status:         updatedEvent.Status,
 		User_id:        updatedEvent.User_id,
+		Remark:         updatedEvent.Remark,
 		Confirmed_date: updatedEvent.Confirmed_date,
 		Created_at:     updatedEvent.Created_at,
 		Updated_at:     updatedEvent.Updated_at,
@@ -322,6 +324,7 @@ func (s *eventService) GetAllEventsVendor(user_name string) ([]*dto.GetEventResp
 			Status:         event.Status,
 			User_id:        event.User_id,
 			User_name:      &user.Name,
+			Remark:         event.Remark,
 			Confirmed_date: event.Confirmed_date,
 			Created_at:     event.Created_at,
 			Updated_at:     event.Updated_at,
